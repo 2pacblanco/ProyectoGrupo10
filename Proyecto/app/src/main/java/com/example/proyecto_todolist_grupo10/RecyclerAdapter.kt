@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.proyecto_todolist_grupo10.MainActivity.Companion.lists
 import kotlinx.android.synthetic.main.historic_cell.view.*
 import kotlin.collections.List
 
@@ -44,6 +45,7 @@ class HistoricAdapter1 (private val historicList: List<Listas>):
 
             view.setOnClickListener{
                 Toast.makeText(view.context, "wena choro presionaste "+item.name, Toast.LENGTH_SHORT).show()
+
             }
         }
 
