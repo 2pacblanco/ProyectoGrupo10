@@ -52,12 +52,13 @@
 
     <Button
         android:id="@+id/btToNewList"
-        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:onClick="createList"
         android:text="+"
-        android:textSize="40sp"
-        android:layout_gravity="center_horizontal"/>
+        android:textSize="40sp" />
 
 </LinearLayout>
 

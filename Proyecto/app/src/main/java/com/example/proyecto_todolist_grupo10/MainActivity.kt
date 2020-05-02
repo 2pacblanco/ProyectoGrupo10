@@ -3,10 +3,13 @@ package com.example.proyecto_todolist_grupo10
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_welcome.*
 import java.io.Serializable
 
 class MainActivity : AppCompatActivity() {
@@ -25,6 +28,8 @@ class MainActivity : AppCompatActivity() {
         createListofLists()
         createUsers()
         supportActionBar?.hide()
+
+
     }
 
     fun onLogin(view: View){
@@ -54,6 +59,8 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+
 
 
     fun createUsers(){
@@ -104,6 +111,7 @@ class MainActivity : AppCompatActivity() {
 
 data class Users(val email: String, val pass: String, val name: String, val UsersLists: MutableList<Listas>): Serializable{}
 
-data class Listas(val items: MutableList<Item>, val name: String, val position: Int): Serializable{}
+
+data class Listas(val items: MutableList<Item>, val name: String, val position: Int): Serializable {}
 
 data class Item(val name: String): Serializable{}
