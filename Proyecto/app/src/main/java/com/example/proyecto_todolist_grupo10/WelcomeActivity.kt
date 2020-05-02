@@ -81,6 +81,13 @@ class WelcomeActivity : AppCompatActivity() {
 
             loginuser!!.UsersLists = listas_usuario
 
+            val fos: FileOutputStream =
+                applicationContext.openFileOutput("usuario_conectado", Context.MODE_PRIVATE)
+            val os = ObjectOutputStream(fos)
+            os.writeObject(loginuser)
+            os.close()
+            fos.close()
+
         }
     }
 
