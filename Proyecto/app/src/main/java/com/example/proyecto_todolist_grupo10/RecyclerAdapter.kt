@@ -1,14 +1,13 @@
 package com.example.proyecto_todolist_grupo10
 
+import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.proyecto_todolist_grupo10.MainActivity.Companion.lists
 import kotlinx.android.synthetic.main.historic_cell.view.*
-import kotlin.collections.List
 
 
 class HistoricAdapter1 (private val historicList: List<Listas>):
@@ -45,8 +44,15 @@ class HistoricAdapter1 (private val historicList: List<Listas>):
 
             view.setOnClickListener{
                 Toast.makeText(view.context, "wena choro presionaste "+item.name, Toast.LENGTH_SHORT).show()
+            }
+
+            view.btDeleteList.setOnClickListener{
+                val intent = Intent(view.context, WelcomeActivity::class.java)
+                intent.putExtra("lista_eliminada",item)
+                view.context.startActivity(intent)
 
             }
+
         }
 
     }

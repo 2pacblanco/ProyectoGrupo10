@@ -4,16 +4,25 @@
     android:layout_width="match_parent"
     android:background="@drawable/border2"
     android:layout_marginTop="10dp"
+    android:orientation="horizontal"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <TextView
         android:id="@+id/twNameofList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:text="Name of List"
         android:textSize="30sp"
         android:layout_marginLeft="45dp"
         android:layout_gravity="center_vertical"
+        />
+    <Button
+        android:id="@+id/btDeleteList"
+        android:layout_width="45dp"
+        android:layout_height="70dp"
+        android:textSize="25dp"
+        android:text="X"
         />
 
 

@@ -1,6 +1,7 @@
 package com.example.proyecto_todolist_grupo10
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -10,11 +11,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.proyecto_todolist_grupo10.MainActivity.Companion.CONTACT
 import kotlinx.android.synthetic.main.activity_welcome.*
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.ObjectInputStream
+import java.io.ObjectOutputStream
 
 
 class WelcomeActivity : AppCompatActivity() {
 
     companion object{
+        var loginuser : Users? = null
         var listas_usuario = mutableListOf<Listas>()
     }
 
@@ -27,25 +33,57 @@ class WelcomeActivity : AppCompatActivity() {
             startActivityForResult(CreateList.newInstance(this), 1)
         }
 
-        val user = intent.getSerializableExtra(CONTACT) as Users
+        loginuser = intent.getSerializableExtra(CONTACT) as? Users
+        val deleteList = intent.getSerializableExtra("lista_eliminada") as? Listas
 
-        listas_usuario = user.UsersLists
+        if (loginuser != null && deleteList == null) {
 
+            listas_usuario = loginuser!!.UsersLists
+            recycler_view.adapter = HistoricAdapter1(listas_usuario)
+            recycler_view.layoutManager = LinearLayoutManager(this)
 
-        recycler_view.adapter = HistoricAdapter1(listas_usuario)
-        recycler_view.layoutManager = LinearLayoutManager(this)
+            val ivUsers = findViewById<ImageView>(R.id.imageviewUser)
+            val userPhotoId = this.resources.getIdentifier("descarga", "drawable", packageName)
+            ivUsers.setImageResource(userPhotoId)
+            val twName = findViewById<TextView>(R.id.twnameuser)
+            twName.text = loginuser!!.name
 
+            val fos: FileOutputStream =
+                applicationContext.openFileOutput("usuario_conectado", Context.MODE_PRIVATE)
+            val os = ObjectOutputStream(fos)
+            os.writeObject(loginuser)
+            os.close()
+            fos.close()
+        }
 
-        val ivUsers = findViewById<ImageView>(R.id.imageviewUser)
+        if (deleteList != null && loginuser == null) {
 
-        val userPhotoId = this.resources.getIdentifier("descarga", "drawable", packageName)
-        ivUsers.setImageResource(userPhotoId)
+            val fis: FileInputStream = applicationContext.openFileInput("usuario_conectado")
+            val sis = ObjectInputStream(fis)
+            loginuser = sis.readObject() as Users
+            sis.close()
+            fis.close()
 
-        val twName = findViewById<TextView>(R.id.twnameuser)
-        twName.text = user.name
+            listas_usuario = loginuser!!.UsersLists
+            recycler_view.adapter = HistoricAdapter1(listas_usuario)
+            recycler_view.layoutManager = LinearLayoutManager(this)
 
+            if (listas_usuario.contains(deleteList)) {
+                listas_usuario.remove(deleteList)
+                recycler_view.adapter?.notifyDataSetChanged()
+            }
 
+            val ivUsers = findViewById<ImageView>(R.id.imageviewUser)
+            val userPhotoId = this.resources.getIdentifier("descarga", "drawable", packageName)
+            ivUsers.setImageResource(userPhotoId)
+            val twName = findViewById<TextView>(R.id.twnameuser)
+            twName.text = loginuser!!.name
+
+            loginuser!!.UsersLists = listas_usuario
+
+        }
     }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -54,8 +92,17 @@ class WelcomeActivity : AppCompatActivity() {
                 var list = getSerializableExtra(CreateList.LIST) as Listas
                 listas_usuario.add(list!!)
                 recycler_view.adapter?.notifyDataSetChanged()
+                loginuser!!.UsersLists = listas_usuario
+
+                val fos: FileOutputStream =
+                    applicationContext.openFileOutput("usuario_conectado", Context.MODE_PRIVATE)
+                val os = ObjectOutputStream(fos)
+                os.writeObject(loginuser)
+                os.close()
+                fos.close()
             }
         }
+
     }
 
 
@@ -63,8 +110,6 @@ class WelcomeActivity : AppCompatActivity() {
         var intent1 = Intent(this,MainActivity::class.java)
         startActivity(intent1)
     }
-
-
 }
 
 

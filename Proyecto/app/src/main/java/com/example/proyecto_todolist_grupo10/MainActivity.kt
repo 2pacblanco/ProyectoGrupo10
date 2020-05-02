@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-data class Users(val email: String, val pass: String, val name: String, val UsersLists: MutableList<Listas>): Serializable{}
+data class Users(val email: String, val pass: String, val name: String, var UsersLists: MutableList<Listas>): Serializable{}
 
 
 data class Listas(val items: MutableList<Item>, val name: String, val position: Int): Serializable {}
