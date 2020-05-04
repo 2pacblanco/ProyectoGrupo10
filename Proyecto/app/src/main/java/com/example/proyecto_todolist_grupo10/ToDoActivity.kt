@@ -11,12 +11,16 @@ import kotlinx.android.synthetic.main.activity_to_do.*
 
 class ToDoActivity : AppCompatActivity() {
 
+    companion object{
+        var nameList : Listas? = null
+        var lista_actividades = mutableListOf<Item>()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do)
         supportActionBar?.hide()
 
-        val list: Listas = intent.getSerializableExtra(CONTACT) as Listas
+        val list: Listas = intent.getSerializableExtra("nameList") as Listas
 
 
         recycler_view.adapter = HistoricAdapter2(list.items)

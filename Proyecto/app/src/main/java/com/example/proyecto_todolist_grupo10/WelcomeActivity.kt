@@ -94,6 +94,43 @@ class WelcomeActivity : AppCompatActivity() {
             os.close()
             fos.close()
         }
+        if(deleteList == null && loginuser == null){
+            //parte de ray
+
+            //aca recibo la
+
+            val fis: FileInputStream = applicationContext.openFileInput("usuario_conectado")
+            val sis = ObjectInputStream(fis)
+            loginuser = sis.readObject() as Users
+            sis.close()
+            fis.close()
+
+            listas_usuario = loginuser!!.UsersLists
+            recycler_view.adapter = HistoricAdapter1(listas_usuario)
+            recycler_view.layoutManager = LinearLayoutManager(this)
+
+            (recycler_view.adapter as HistoricAdapter1).setDataset(listas_usuario)
+
+
+            val ivUsers = findViewById<ImageView>(R.id.imageviewUser)
+            val userPhotoId = this.resources.getIdentifier("descarga", "drawable", packageName)
+            ivUsers.setImageResource(userPhotoId)
+            val twName = findViewById<TextView>(R.id.twnameuser)
+            twName.text = loginuser!!.name
+
+            var newList: List<Listas> = (recycler_view.adapter as HistoricAdapter1).getDataset()
+
+            loginuser!!.UsersLists = newList as MutableList<Listas>
+
+
+            val fos: FileOutputStream =
+                applicationContext.openFileOutput("usuario_conectado", Context.MODE_PRIVATE)
+            val os = ObjectOutputStream(fos)
+            os.writeObject(loginuser)
+            os.close()
+            fos.close()
+
+        }
 
 
     }

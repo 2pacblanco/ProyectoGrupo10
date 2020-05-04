@@ -19,9 +19,8 @@
             android:id="@+id/btLogout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/grey"
             android:onClick="onBack"
-            android:text="atras"
+            android:background="@drawable/abc_vector_test"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
         <LinearLayout

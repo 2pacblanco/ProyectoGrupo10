@@ -87,6 +87,10 @@ class HistoricAdapter1 (private val historicList: List<Listas>):
 
             view.setOnClickListener{
                 Toast.makeText(view.context, "wena choro presionaste "+item.name, Toast.LENGTH_SHORT).show()
+                var intent = Intent(view.context, ToDoActivity::class.java)
+                intent.putExtra("nameList",item)
+                view.context.startActivity(intent)
+
             }
 
             view.btDeleteList.setOnClickListener{
