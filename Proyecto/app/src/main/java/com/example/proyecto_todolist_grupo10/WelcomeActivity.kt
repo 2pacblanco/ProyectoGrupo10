@@ -37,16 +37,21 @@ class WelcomeActivity : AppCompatActivity() {
         val deleteList = intent.getSerializableExtra("lista_eliminada") as? Listas
 
         if (loginuser != null && deleteList == null) {
-
             listas_usuario = loginuser!!.UsersLists
             recycler_view.adapter = HistoricAdapter1(listas_usuario)
             recycler_view.layoutManager = LinearLayoutManager(this)
+
+            (recycler_view.adapter as HistoricAdapter1).setDataset(listas_usuario)
 
             val ivUsers = findViewById<ImageView>(R.id.imageviewUser)
             val userPhotoId = this.resources.getIdentifier("descarga", "drawable", packageName)
             ivUsers.setImageResource(userPhotoId)
             val twName = findViewById<TextView>(R.id.twnameuser)
             twName.text = loginuser!!.name
+
+            var newList: List<Listas> = (recycler_view.adapter as HistoricAdapter1).getDataset()
+
+            loginuser!!.UsersLists = newList as MutableList<Listas>
 
             val fos: FileOutputStream =
                 applicationContext.openFileOutput("usuario_conectado", Context.MODE_PRIVATE)
@@ -57,7 +62,6 @@ class WelcomeActivity : AppCompatActivity() {
         }
 
         if (deleteList != null && loginuser == null) {
-
             val fis: FileInputStream = applicationContext.openFileInput("usuario_conectado")
             val sis = ObjectInputStream(fis)
             loginuser = sis.readObject() as Users
@@ -67,6 +71,8 @@ class WelcomeActivity : AppCompatActivity() {
             listas_usuario = loginuser!!.UsersLists
             recycler_view.adapter = HistoricAdapter1(listas_usuario)
             recycler_view.layoutManager = LinearLayoutManager(this)
+
+            (recycler_view.adapter as HistoricAdapter1).setDataset(listas_usuario)
 
             if (listas_usuario.contains(deleteList)) {
                 listas_usuario.remove(deleteList)
@@ -79,7 +85,9 @@ class WelcomeActivity : AppCompatActivity() {
             val twName = findViewById<TextView>(R.id.twnameuser)
             twName.text = loginuser!!.name
 
-            loginuser!!.UsersLists = listas_usuario
+            var newList: List<Listas> = (recycler_view.adapter as HistoricAdapter1).getDataset()
+
+            loginuser!!.UsersLists = newList as MutableList<Listas>
 
             val fos: FileOutputStream =
                 applicationContext.openFileOutput("usuario_conectado", Context.MODE_PRIVATE)
@@ -87,8 +95,9 @@ class WelcomeActivity : AppCompatActivity() {
             os.writeObject(loginuser)
             os.close()
             fos.close()
-
         }
+
+
     }
 
 

@@ -1,6 +1,5 @@
 package com.example.proyecto_todolist_grupo10
 
-import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +7,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.historic_cell.view.*
+import java.util.*
 
 
 class HistoricAdapter1 (private val historicList: List<Listas>):
-    RecyclerView.Adapter<HistoricAdapter1.HistoricViewHolder>() {
+    RecyclerView.Adapter<HistoricAdapter1.HistoricViewHolder>(){
+
+    private lateinit var dataset: List<Listas>
+
 
     //override se hace aun que devuelva null
     override fun onCreateViewHolder(parent: ViewGroup, viewtype: Int): HistoricViewHolder{
@@ -29,6 +32,40 @@ class HistoricAdapter1 (private val historicList: List<Listas>):
         val currentItem = historicList[position]
         holder.bindHistoric(currentItem)
 
+        holder.itemView.btUp.setOnClickListener{
+            if(position == 0){
+                Toast.makeText(holder.itemView.context, "No se puede subir más", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                Collections.swap(historicList, position , position -1)
+                notifyItemMoved(position,position-1)
+                dataset = historicList
+                notifyDataSetChanged()
+            }
+
+        }
+        holder.itemView.btDown.setOnClickListener{
+            if(position + 1 == historicList.size){
+                Toast.makeText(holder.itemView.context, "No se puede bajar más", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                Collections.swap(historicList, position , position + 1)
+                notifyItemMoved(position,position+1)
+                dataset = historicList
+                notifyDataSetChanged()
+            }
+
+        }
+
+    }
+
+    fun setDataset(dadaist: List<Listas>) {
+        this.dataset = dadaist
+        notifyDataSetChanged()
+    }
+
+    fun getDataset(): List<Listas> {
+        return dataset
     }
 
 
@@ -52,6 +89,7 @@ class HistoricAdapter1 (private val historicList: List<Listas>):
                 view.context.startActivity(intent)
 
             }
+
 
         }
 

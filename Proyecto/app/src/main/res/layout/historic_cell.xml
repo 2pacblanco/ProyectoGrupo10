@@ -7,6 +7,31 @@
     android:orientation="horizontal"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <LinearLayout
+        android:layout_width="45dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:drawable/arrow_up_float"
+            android:gravity="center"
+            android:textSize="26sp" />
+
+        <Button
+            android:id="@+id/btDown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:drawable/arrow_down_float"
+            android:gravity="center"
+            android:textSize="25sp" />
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/twNameofList"
         android:layout_width="wrap_content"
