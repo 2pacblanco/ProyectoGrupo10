@@ -1,5 +1,6 @@
 package com.example.proyecto_todolist_grupo10
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,16 +11,18 @@ import android.widget.Toast
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_welcome.*
-import java.io.Serializable
+import java.io.*
 
 class MainActivity : AppCompatActivity() {
 
     companion object{
         const val  CONTACT = "CONTACT"
+        var log_user: Users? = null
+        var user_local: Users? = null
+        var user_local1: Users? = null
         var users = mutableListOf<Users>()
         var lists = mutableListOf<Listas>()
         var lists2 = mutableListOf<Listas>()
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +31,60 @@ class MainActivity : AppCompatActivity() {
         createListofLists()
         createUsers()
         supportActionBar?.hide()
+
+        log_user = intent.getSerializableExtra("usuario_conect") as? Users
+
+
+
+        try{
+            val fis: FileInputStream = applicationContext.openFileInput("usuarios")
+            val sis = ObjectInputStream(fis)
+            user_local = sis.readObject() as Users
+            user_local1 = sis.readObject() as Users
+            sis.close()
+            fis.close()
+
+        } catch(e:EOFException){
+            val fos: FileOutputStream =
+                applicationContext.openFileOutput("usuarios", Context.MODE_PRIVATE)
+            val os = ObjectOutputStream(fos)
+            os.writeObject(users[0])
+            os.writeObject(users[1])
+        } finally {
+            val fis: FileInputStream = applicationContext.openFileInput("usuarios")
+            val sis = ObjectInputStream(fis)
+            user_local = sis.readObject() as Users
+            user_local1 = sis.readObject() as Users
+            sis.close()
+            fis.close()
+
+        }
+
+
+        if(log_user != null){
+            if(log_user!!.name == users[0].name){
+                val fos: FileOutputStream =
+                    applicationContext.openFileOutput("usuarios", Context.MODE_PRIVATE)
+                val os = ObjectOutputStream(fos)
+                os.writeObject(log_user)
+                os.writeObject(user_local1)
+                os.close()
+                fos.close()
+            }
+            if(log_user!!.name == users[1].name){
+                val fos: FileOutputStream =
+                    applicationContext.openFileOutput("usuarios", Context.MODE_PRIVATE)
+                val os = ObjectOutputStream(fos)
+                os.writeObject(user_local)
+                os.writeObject(log_user)
+                os.close()
+                fos.close()
+            }
+        }
+
+
+
+
 
 
     }
@@ -44,19 +101,27 @@ class MainActivity : AppCompatActivity() {
         }
         else{
             var counter = 1
-            users.forEach {
-                if (it.email == email && it.pass== pass){
-                    Toast.makeText(applicationContext, "Ingreso Correcto, bienvenido "+it.name, Toast.LENGTH_SHORT).show()
-                    var intent = Intent(this,WelcomeActivity::class.java)
-                    intent.putExtra(CONTACT,it)
-                    startActivity(intent)
-                    counter = 2
-                }
+            if(user_local!!.email == email && user_local!!.pass == pass){
+                var intent = Intent(this,WelcomeActivity::class.java)
+                intent.putExtra(CONTACT, user_local)
+                startActivity(intent)
+                counter = 2
+            }
+            if(user_local1!!.email == email && user_local1!!.pass == pass){
+                var intent = Intent(this,WelcomeActivity::class.java)
+                intent.putExtra(CONTACT, user_local1)
+                startActivity(intent)
+                counter = 2
             }
             if(counter == 1){
                 Toast.makeText(applicationContext,"DATOS ERRÓNEOS, INGRESE NUEVAMENTE",Toast.LENGTH_SHORT).show()
             }
+
+
+
+
         }
+
 
     }
 
@@ -68,6 +133,7 @@ class MainActivity : AppCompatActivity() {
             users.add(Users("jadonoso2@miuandes.cl","1234","Johnny Donoso",lists))
             users.add(Users("wena","xoro","El wenaxoro", lists2))
         }
+
     }
 
 

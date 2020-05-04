@@ -11,10 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.proyecto_todolist_grupo10.MainActivity.Companion.CONTACT
 import kotlinx.android.synthetic.main.activity_welcome.*
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.ObjectInputStream
-import java.io.ObjectOutputStream
+import java.io.*
 
 
 class WelcomeActivity : AppCompatActivity() {
@@ -89,6 +86,7 @@ class WelcomeActivity : AppCompatActivity() {
 
             loginuser!!.UsersLists = newList as MutableList<Listas>
 
+
             val fos: FileOutputStream =
                 applicationContext.openFileOutput("usuario_conectado", Context.MODE_PRIVATE)
             val os = ObjectOutputStream(fos)
@@ -123,8 +121,11 @@ class WelcomeActivity : AppCompatActivity() {
 
 
     fun onLogout(view: View){
+
         var intent1 = Intent(this,MainActivity::class.java)
+        intent1.putExtra("usuario_conect",loginuser)
         startActivity(intent1)
+
     }
 }
 

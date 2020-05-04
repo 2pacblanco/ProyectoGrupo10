@@ -1,9 +1,15 @@
 package com.example.proyecto_todolist_grupo10
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
+import android.widget.NumberPicker
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.historic_cell.view.*
@@ -84,9 +90,21 @@ class HistoricAdapter1 (private val historicList: List<Listas>):
             }
 
             view.btDeleteList.setOnClickListener{
-                val intent = Intent(view.context, WelcomeActivity::class.java)
-                intent.putExtra("lista_eliminada",item)
-                view.context.startActivity(intent)
+                val builder = AlertDialog.Builder(it.context)
+                builder.setCancelable(false)
+                builder.setTitle("Alerta")
+                builder.setMessage("Desea Eliminar?")
+
+                builder.setPositiveButton(android.R.string.yes){ _, _ ->
+                    val intent = Intent(view.context, WelcomeActivity::class.java)
+                    intent.putExtra("lista_eliminada",item)
+                    view.context.startActivity(intent)
+                }
+                builder.setNegativeButton(android.R.string.no) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                builder.show()
+
 
             }
 
