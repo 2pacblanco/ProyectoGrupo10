@@ -44,6 +44,12 @@ class MainActivity : AppCompatActivity() {
             sis.close()
             fis.close()
 
+        }catch(e: FileNotFoundException){
+            val fos: FileOutputStream =
+                applicationContext.openFileOutput("usuarios", Context.MODE_PRIVATE)
+            val os = ObjectOutputStream(fos)
+            os.writeObject(users[0])
+            os.writeObject(users[1])
         } catch(e:EOFException){
             val fos: FileOutputStream =
                 applicationContext.openFileOutput("usuarios", Context.MODE_PRIVATE)
@@ -81,11 +87,6 @@ class MainActivity : AppCompatActivity() {
                 fos.close()
             }
         }
-
-
-
-
-
 
     }
 

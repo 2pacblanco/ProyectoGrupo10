@@ -23,16 +23,22 @@ class HistoricAdapter2 (private val toDoList: List<Item>):
     }
 
     override fun onBindViewHolder(holder: HistoricViewHolder, position: Int) {
-        toDoList[position]
+        val currentItem = toDoList[position]
+        holder.bindHistoric(currentItem)
 
     }
 
 
     class HistoricViewHolder(v: View) : RecyclerView.ViewHolder(v){
         private var view: View = v
-        private var item: Listas? = null
+        private var item: Item? = null
 
         init{}
+
+        fun bindHistoric(item: Item){
+            this.item = item
+            view.twNameofList.text = item.name
+        }
 
 
     }
