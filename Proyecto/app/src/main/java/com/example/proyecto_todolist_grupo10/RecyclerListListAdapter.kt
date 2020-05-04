@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.historic_cell.view.*
+import kotlinx.android.synthetic.main.to_do_cells.view.*
 import kotlin.collections.List
 
 
@@ -30,11 +31,20 @@ class HistoricAdapter2 (private val toDoList: List<Item>):
 
     class HistoricViewHolder(v: View) : RecyclerView.ViewHolder(v){
         private var view: View = v
-        private var item: Listas? = null
+        private var item: Item? = null
 
         init{}
 
+        fun bindHistoric(item: Item){
+            this.item = item
+            view.twNameToDoActivity.text = item.name
+
+
+
+        }
 
     }
+
+
 }
 
