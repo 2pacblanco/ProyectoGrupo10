@@ -41,4 +41,11 @@ class ToDoActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun changeName(view: View){
+        var intent = Intent(view.context, ChangeNameList::class.java)
+        startActivity(intent)
+    }
+
+
+
 }

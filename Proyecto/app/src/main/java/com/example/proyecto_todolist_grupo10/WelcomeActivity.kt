@@ -106,6 +106,7 @@ class WelcomeActivity : AppCompatActivity() {
             fis.close()
 
             listas_usuario = loginuser!!.UsersLists
+
             recycler_view.adapter = HistoricAdapter1(listas_usuario)
             recycler_view.layoutManager = LinearLayoutManager(this)
 

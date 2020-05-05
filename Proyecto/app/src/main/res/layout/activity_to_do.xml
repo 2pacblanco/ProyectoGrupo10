@@ -19,8 +19,9 @@
             android:id="@+id/btLogout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onBack"
+            android:layout_margin="5dp"
             android:background="@drawable/abc_vector_test"
+            android:onClick="onBack"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
         <LinearLayout
@@ -36,18 +37,52 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:text="Nombre de la Lista"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:onClick="changeName"/>
 
 
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:text="+ Añadir To Do"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_marginTop="110dp"
-        tools:listitem="@layout/to_do_cells" />
+        android:layout_height="382dp"
+        android:layout_marginTop="50dp"
+        tools:listitem="@layout/to_do_cells">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Editar"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Compartir"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+    </LinearLayout>
 
 </LinearLayout>
 

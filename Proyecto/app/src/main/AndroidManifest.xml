@@ -11,6 +11,7 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".CreateList"></activity>
+        <activity android:name=".ChangeNameList"></activity>
         <activity android:name=".WelcomeActivity" />
         <activity android:name=".ToDoActivity"></activity>
 
