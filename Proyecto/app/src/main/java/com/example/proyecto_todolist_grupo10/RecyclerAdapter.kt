@@ -12,14 +12,15 @@ import android.widget.NumberPicker
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.proyecto_todolist_grupo10.model.Lists
 import kotlinx.android.synthetic.main.historic_cell.view.*
 import java.util.*
 
 
-class HistoricAdapter1 (private val historicList: List<Listas>):
+class HistoricAdapter1 (private val historicList: ArrayList<Lists>):
     RecyclerView.Adapter<HistoricAdapter1.HistoricViewHolder>(){
 
-    private lateinit var dataset: List<Listas>
+    private lateinit var dataset: ArrayList<Lists>
 
 
     //override se hace aun que devuelva null
@@ -62,55 +63,55 @@ class HistoricAdapter1 (private val historicList: List<Listas>):
             }
 
         }
+        holder.itemView.btDeleteList.setOnClickListener{
+            val builder = AlertDialog.Builder(it.context)
+            builder.setCancelable(false)
+            builder.setTitle("Alerta")
+            builder.setMessage("Desea Eliminar?")
+
+            builder.setPositiveButton(android.R.string.yes){ _, _ ->
+                historicList.remove(currentItem)
+                dataset = historicList
+                notifyDataSetChanged()
+            }
+            builder.setNegativeButton(android.R.string.no) { dialog, _ ->
+                dialog.dismiss()
+            }
+            builder.show()
+
+
+        }
 
     }
 
-    fun setDataset(dadaist: List<Listas>) {
+    fun setDataset(dadaist: ArrayList<Lists>) {
         this.dataset = dadaist
         notifyDataSetChanged()
     }
 
-    fun getDataset(): List<Listas> {
+    fun getDataset(): ArrayList<Lists> {
         return dataset
     }
 
 
     class HistoricViewHolder(v: View) : RecyclerView.ViewHolder(v){
         private var view: View = v
-        private var item: Listas? = null
+        private var item: Lists? = null
 
         init{}
 
-        fun bindHistoric(item: Listas){
+        fun bindHistoric(item: Lists){
             this.item = item
             view.twNameofList.text = item.name
 
             view.setOnClickListener{
-                Toast.makeText(view.context, "wena choro presionaste "+item.name, Toast.LENGTH_SHORT).show()
                 var intent = Intent(view.context, ToDoActivity::class.java)
-                intent.putExtra("nameList",item)
+                intent.putExtra("List",item)
+                intent.putExtra("user_log", WelcomeActivity.loginuser)
                 view.context.startActivity(intent)
-
             }
 
-            view.btDeleteList.setOnClickListener{
-                val builder = AlertDialog.Builder(it.context)
-                builder.setCancelable(false)
-                builder.setTitle("Alerta")
-                builder.setMessage("Desea Eliminar?")
 
-                builder.setPositiveButton(android.R.string.yes){ _, _ ->
-                    val intent = Intent(view.context, WelcomeActivity::class.java)
-                    intent.putExtra("lista_eliminada",item)
-                    view.context.startActivity(intent)
-                }
-                builder.setNegativeButton(android.R.string.no) { dialog, _ ->
-                    dialog.dismiss()
-                }
-                builder.show()
-
-
-            }
 
 
         }

@@ -25,17 +25,10 @@ class ChangeNameList : AppCompatActivity() {
     }
 
 
-
     fun changeName(view: View){
         var newName = inputNewNameOfList.toString()
         Toast.makeText(view.context, "Se ha cambiado el Nombre de la lista ", Toast.LENGTH_SHORT).show()
-        /*
-        val intent = Intent(view.context, ToDoActivity::class.java)
-        intent.putExtra("nameList", newName)
-        view.context.startActivity(intent)
-        */
-        finish()
-
+        //finish()
 
     }
 }

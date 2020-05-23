@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
+import com.example.proyecto_todolist_grupo10.model.Item
+import com.example.proyecto_todolist_grupo10.model.Lists
 import kotlinx.android.synthetic.main.activity_create_list.*
 
 class CreateList : AppCompatActivity() {
@@ -31,7 +33,7 @@ class CreateList : AppCompatActivity() {
         items.add(Item("item creado automáticamente 3"))
         items.add(Item("item creado automáticamente 4"))
 
-        val list = Listas(items,inputNameOfList.text.toString(),position = 0)
+        val list = Lists(items as ArrayList<Item>,inputNameOfList.text.toString(),position = 0)
         val data = Intent().apply {
             putExtra(LIST,list)
         }

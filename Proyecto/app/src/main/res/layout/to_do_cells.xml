@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+
     android:layout_height="70dp"
     android:layout_width="match_parent"
     android:background="@drawable/border2"
     android:layout_marginTop="10dp"
+    android:orientation="horizontal"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <CheckBox
@@ -14,12 +16,35 @@
 
     <TextView
         android:id="@+id/twNameToDoActivity"
-        android:layout_width="wrap_content"
+        android:layout_width="230dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="45dp"
         android:text="Name of Activity"
         android:textSize="30sp" />
+
+    <LinearLayout
+        android:layout_marginStart="60dp"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnChangeName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:drawable/ic_menu_edit" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnChange"
+            android:layout_weight="1"/>
+
+
+    </LinearLayout>
+
+
 
 
 </LinearLayout>
