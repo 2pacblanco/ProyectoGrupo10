@@ -1,5 +1,6 @@
 package com.example.proyecto_todolist_grupo10
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.proyecto_todolist_grupo10.model.Item
 import com.example.proyecto_todolist_grupo10.model.Lists
 import com.example.proyecto_todolist_grupo10.model.Users
+import kotlinx.android.synthetic.main.activity_add_item.*
 import kotlinx.android.synthetic.main.activity_to_do.*
 import kotlinx.android.synthetic.main.activity_to_do.recycler_view
 import kotlinx.android.synthetic.main.activity_welcome.*
@@ -46,6 +48,26 @@ class ToDoActivity : AppCompatActivity() {
         twName.text = tempList!!.name
 
 
+
+        btNewItem.setOnClickListener {
+            startActivityForResult(AddItem.newInstance1(this), 1)
+        }
+
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if ( resultCode == Activity.RESULT_OK) {
+            data?.apply {
+                var item = getSerializableExtra(AddItem.ITEM) as Item
+                tempList!!.items.add(item)
+                recycler_view.adapter?.notifyDataSetChanged()
+                //loguser!!.UsersLists = tempList as ArrayList<Lists>
+
+            }
+        }
+
     }
 
 
@@ -66,10 +88,7 @@ class ToDoActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun changeName(view: View){
-        var intent = Intent(view.context, ChangeNameList::class.java)
-        startActivity(intent)
-    }
+
 
 
 

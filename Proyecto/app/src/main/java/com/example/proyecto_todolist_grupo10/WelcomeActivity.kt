@@ -32,7 +32,6 @@ class WelcomeActivity : AppCompatActivity() {
 
     }
 
-    @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -45,8 +44,8 @@ class WelcomeActivity : AppCompatActivity() {
         }
         else{
             println("entra aqui hgablando como shoro kjiee tu vas al rancho puro mochila")
-            val item1 = Item("item1")
-            val item2 = Item("item2")
+            val item1 = Item("item1", 0, 0, "Bueno, esta es la nota generada automaticamente al crear la lista", "25/12/2020")
+            val item2 = Item("item2", 0, 0, "Bueno, esta es la nota generada automaticamente al crear la lista", "25/12/2020")
             var items = ArrayList<Item>()
             items.add(item1)
             items.add(item2)
