@@ -38,21 +38,25 @@ class AddItem : AppCompatActivity() {
         }
         else{
             if( checkPriority.isChecked && noteitem != ""){
-                newItem = Item(nameitem,0, 1,noteitem, "25/12/2020")
+                newItem = Item(nameitem,0, 1,noteitem, "25/12/2020",0)
             }
             if(!checkPriority.isChecked && noteitem != ""){
-                newItem = Item(nameitem,0, 0,noteitem, "25/12/2020")
+                newItem = Item(nameitem,0, 0,noteitem, "25/12/2020",0)
             }
             if(checkPriority.isChecked && noteitem == ""){
-                newItem = Item(nameitem,0, 1,"", "25/12/2020")
+                newItem = Item(nameitem,0, 1,"", "25/12/2020",0)
             }
-            newItem = Item(nameitem,0, 0,"", "25/12/2020")
+            newItem = Item(nameitem,0, 0,"", "25/12/2020",0)
         }
 
         val data = Intent().apply {
             putExtra(ITEM, newItem!!)
         }
         setResult(Activity.RESULT_OK,data)
+        finish()
+    }
+
+    fun cancel(view: View){
         finish()
     }
 }

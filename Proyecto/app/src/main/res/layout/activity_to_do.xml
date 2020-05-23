@@ -48,15 +48,22 @@
         android:id="@+id/btNewItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="left"
+        android:gravity="center_horizontal"
         android:text="+ Añadir To Do"
         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+    <Button
+        android:id="@+id/btCompletar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Marcar como Listos✓✓"
+         />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="382dp"
-        android:layout_marginTop="50dp"
         tools:listitem="@layout/to_do_cells">
 
     </androidx.recyclerview.widget.RecyclerView>

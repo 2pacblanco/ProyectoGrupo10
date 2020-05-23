@@ -1,22 +1,25 @@
 package com.example.proyecto_todolist_grupo10
 
-import android.app.Activity
 import android.app.Dialog
-import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
+import android.widget.CheckBox
+import android.widget.Toast
+import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import com.example.proyecto_todolist_grupo10.model.Item
 import kotlinx.android.synthetic.main.custom_dialog_name.*
 import kotlinx.android.synthetic.main.to_do_cells.view.*
+import java.util.*
 
 
-class HistoricAdapter2 (private val toDoList: List<Item>):
+class HistoricAdapter2 (private val toDoList: ArrayList<Item>):
     RecyclerView.Adapter<HistoricAdapter2.HistoricViewHolder>() {
+
+
 
     private lateinit var dataset: ArrayList<Item>
 
@@ -34,6 +37,31 @@ class HistoricAdapter2 (private val toDoList: List<Item>):
         val currentItem = toDoList[position]
         holder.bindHistoric(currentItem)
 
+        holder.itemView.btUpItem.setOnClickListener{
+            if(position == 0){
+                Toast.makeText(holder.itemView.context, "No se puede subir más", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                Collections.swap(toDoList, position , position -1)
+                notifyItemMoved(position,position-1)
+                dataset = toDoList
+                notifyDataSetChanged()
+            }
+
+        }
+        holder.itemView.btDownItem.setOnClickListener{
+            if(position + 1 == toDoList.size){
+                Toast.makeText(holder.itemView.context, "No se puede bajar más", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                Collections.swap(toDoList, position , position + 1)
+                notifyItemMoved(position,position+1)
+                dataset = toDoList
+                notifyDataSetChanged()
+            }
+
+        }
+
         holder.itemView.btnChangeName.setOnClickListener{
             val dialog = Dialog(it.context)
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -49,6 +77,34 @@ class HistoricAdapter2 (private val toDoList: List<Item>):
                 dialog.dismiss()
             })
             dialog.show()
+        }
+
+        holder.itemView.checkBoxItem.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked){
+                currentItem.check = 1
+                dataset = toDoList
+                notifyDataSetChanged()
+            }else{
+                currentItem.check = 0
+                dataset = toDoList
+                notifyDataSetChanged()
+            }
+
+            var index = 0
+            toDoList.forEach {
+                if(it.check == 1){
+                    index =+1
+                }
+            }
+            println(index)
+            if(index>0){
+                ToDoActivity.btnlisto.visibility = View.VISIBLE
+            }
+            if(index == 0){
+                ToDoActivity.btnlisto.visibility = View.GONE
+            }
+
+
         }
 
     }

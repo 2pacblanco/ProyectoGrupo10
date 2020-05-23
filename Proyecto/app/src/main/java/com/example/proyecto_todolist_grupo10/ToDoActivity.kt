@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +22,7 @@ import kotlin.collections.ArrayList
 class ToDoActivity : AppCompatActivity() {
 
     companion object{
+        lateinit var btnlisto: Button
         var tempList : Lists? = null
         var loguser : Users? = null
         var list : Lists? = null
@@ -31,6 +33,9 @@ class ToDoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_to_do)
         supportActionBar?.hide()
 
+        btnlisto = findViewById<Button>(R.id.btCompletar)
+        btnlisto.visibility = View.GONE
+
 
         list = intent.getSerializableExtra("List") as Lists
         loguser = intent.getSerializableExtra("user_log") as Users
@@ -40,12 +45,14 @@ class ToDoActivity : AppCompatActivity() {
         recycler_view.adapter = HistoricAdapter2(tempList!!.items)
         recycler_view.layoutManager = LinearLayoutManager(this)
         (recycler_view.adapter as HistoricAdapter2).setDataset(tempList!!.items)
-        var newList: ArrayList<Item> = (recycler_view.adapter as HistoricAdapter2).getDataset()
+        var newList: List<Item> = (recycler_view.adapter as HistoricAdapter2).getDataset()
 
 
-        tempList!!.items = newList
+        tempList!!.items = newList as ArrayList<Item>
         val twName = findViewById<TextView>(R.id.twNameList)
         twName.text = tempList!!.name
+
+
 
 
 
@@ -63,7 +70,6 @@ class ToDoActivity : AppCompatActivity() {
                 var item = getSerializableExtra(AddItem.ITEM) as Item
                 tempList!!.items.add(item)
                 recycler_view.adapter?.notifyDataSetChanged()
-                //loguser!!.UsersLists = tempList as ArrayList<Lists>
 
             }
         }

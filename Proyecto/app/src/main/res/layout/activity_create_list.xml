@@ -25,14 +25,34 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"/>
 
-        <Button
+        <LinearLayout
             android:layout_marginTop="40dp"
-            android:layout_gravity="center_horizontal"
-            android:id="@+id/btConfirmarLista"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="createList"
-            android:text="Crear Lista" />
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/btConfirmarLista"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="createList"
+                android:text="Crear Lista" />
+
+            <Button
+                android:id="@+id/btCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="cancel"
+                android:text="Cancel" />
+
+
+        </LinearLayout>
+
+
+
         <TextView
             android:layout_marginTop="30dp"
             android:layout_width="wrap_content"
