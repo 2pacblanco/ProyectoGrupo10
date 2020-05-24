@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_add_item.*
 import kotlinx.android.synthetic.main.activity_to_do.*
 import kotlinx.android.synthetic.main.activity_to_do.recycler_view
 import kotlinx.android.synthetic.main.activity_welcome.*
+import org.w3c.dom.Text
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -26,6 +27,8 @@ class ToDoActivity : AppCompatActivity() {
         var tempList : Lists? = null
         var loguser : Users? = null
         var list : Lists? = null
+        var complete_items = ArrayList<Item>()
+        var state = 0
 
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +45,17 @@ class ToDoActivity : AppCompatActivity() {
 
         tempList = list
 
+        tempList!!.items.forEach{
+            if(it.estado == 1){
+                complete_items.add(it)
+            }
+        }
+
+        complete_items.forEach {
+            println(it.name)
+        }
+
+
         recycler_view.adapter = HistoricAdapter2(tempList!!.items)
         recycler_view.layoutManager = LinearLayoutManager(this)
         (recycler_view.adapter as HistoricAdapter2).setDataset(tempList!!.items)
@@ -53,6 +67,47 @@ class ToDoActivity : AppCompatActivity() {
         twName.text = tempList!!.name
 
 
+        tempList!!.items.forEach {
+            if(it.estado == 1){
+                tempList!!.items.remove(it)
+                if(!complete_items.contains(it)){
+                    complete_items.add(it)
+                }
+            }
+        }
+
+        val hipertext : TextView = findViewById(R.id.MostrarCompletados)
+
+        recycler_view2.adapter = HistoricAdapter3(complete_items)
+        recycler_view2.layoutManager = LinearLayoutManager(this)
+
+        recycler_view2.visibility = View.GONE
+
+        hipertext.setOnClickListener{
+            if(recycler_view2.visibility == View.VISIBLE){ //si es Visible lo pones Gone
+                recycler_view2.visibility = View.GONE
+                hipertext.text = "Mostrar Completados"
+            }else{ // si no es Visible, lo pones
+                recycler_view2.visibility = View.VISIBLE;
+                hipertext.text = "Ocultar Completados"
+            }
+
+        }
+
+
+        btnlisto.setOnClickListener{
+            tempList!!.items.forEach {
+                if(it.check == 1){
+                    it.estado = 1
+                }
+            }
+
+            Toast.makeText(applicationContext, "Items completados existosamente!!", Toast.LENGTH_SHORT).show()
+            var intent = Intent(this,ToDoActivity::class.java)
+            intent.putExtra("user_log", loguser)
+            intent.putExtra("List", tempList)
+            startActivity(intent)
+        }
 
 
 
@@ -82,7 +137,6 @@ class ToDoActivity : AppCompatActivity() {
         var index = 0
         loguser!!.UsersLists.forEach{
             if(it.name == list!!.name) {
-                println(index)
                 loguser!!.UsersLists[index] = tempList!!
                 return@forEach
             }
