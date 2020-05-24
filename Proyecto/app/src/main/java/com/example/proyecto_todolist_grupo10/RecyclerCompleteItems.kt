@@ -14,7 +14,7 @@ import java.util.*
 class HistoricAdapter3 (private val completeItems: ArrayList<Item>):
     RecyclerView.Adapter<HistoricAdapter3.HistoricViewHolder>() {
 
-    //private lateinit var dataset: ArrayList<Item>
+    private lateinit var dataset: ArrayList<Item>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewtype: Int): HistoricViewHolder{
         val item = LayoutInflater.from(parent.context).inflate((R.layout.cells_complete_items),parent,false)
@@ -31,14 +31,14 @@ class HistoricAdapter3 (private val completeItems: ArrayList<Item>):
         holder.bindHistoric(currentItem)
 
     }
-    //fun setDataset(dadaist: ArrayList<Item>) {
-      //  this.dataset = dadaist
-        //notifyDataSetChanged()
-    //}
+    fun setDataset(dadaist: ArrayList<Item>) {
+       this.dataset = dadaist
+        notifyDataSetChanged()
+    }
 
-    //fun getDataset(): ArrayList<Item> {
-      //  return dataset
-    //}
+    fun getDataset(): ArrayList<Item> {
+        return dataset
+    }
 
 
     class HistoricViewHolder(v: View) : RecyclerView.ViewHolder(v){

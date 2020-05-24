@@ -45,11 +45,31 @@ class ToDoActivity : AppCompatActivity() {
 
         tempList = list
 
+
+
+        val newlist1 = ArrayList<Item>()
+
         tempList!!.items.forEach{
             if(it.estado == 1){
-                complete_items.add(it)
+                if(!tempList!!.itemsComplete!!.contains(it)){
+                    tempList!!.itemsComplete!!.add(it)
+                }
+
+            }
+            else{
+                newlist1.add(it)
             }
         }
+
+        tempList!!.items = newlist1
+
+        recycler_view2.adapter = HistoricAdapter3(tempList!!.itemsComplete!!)
+        recycler_view2.layoutManager = LinearLayoutManager(this)
+        (recycler_view2.adapter as HistoricAdapter3).setDataset(complete_items)
+
+
+
+
 
         complete_items.forEach {
             println(it.name)
@@ -67,21 +87,10 @@ class ToDoActivity : AppCompatActivity() {
         twName.text = tempList!!.name
 
 
-        tempList!!.items.forEach {
-            if(it.estado == 1){
-                tempList!!.items.remove(it)
-                if(!complete_items.contains(it)){
-                    complete_items.add(it)
-                }
-            }
-        }
+
 
         val hipertext : TextView = findViewById(R.id.MostrarCompletados)
 
-        recycler_view2.adapter = HistoricAdapter3(complete_items)
-        recycler_view2.layoutManager = LinearLayoutManager(this)
-
-        recycler_view2.visibility = View.GONE
 
         hipertext.setOnClickListener{
             if(recycler_view2.visibility == View.VISIBLE){ //si es Visible lo pones Gone
@@ -96,11 +105,17 @@ class ToDoActivity : AppCompatActivity() {
 
 
         btnlisto.setOnClickListener{
+            val newlist1 = ArrayList<Item>()
             tempList!!.items.forEach {
                 if(it.check == 1){
                     it.estado = 1
                 }
+                else{
+                    newlist1.add(it)
+                }
             }
+
+            //tempList!!.items = newlist1
 
             Toast.makeText(applicationContext, "Items completados existosamente!!", Toast.LENGTH_SHORT).show()
             var intent = Intent(this,ToDoActivity::class.java)
@@ -114,6 +129,13 @@ class ToDoActivity : AppCompatActivity() {
         btNewItem.setOnClickListener {
             startActivityForResult(AddItem.newInstance1(this), 1)
         }
+
+
+
+
+
+
+        recycler_view2.visibility = View.GONE
 
 
     }
