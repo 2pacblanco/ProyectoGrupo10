@@ -52,7 +52,7 @@ class WelcomeActivity : AppCompatActivity() {
             val lista_usuario = Lists(items, "lista1", 0)
             var listas_usuario= ArrayList<Lists>()
             listas_usuario.add(lista_usuario)
-            loginuser = Users("mail1","1234", "johnny donoso", listas_usuario)
+            loginuser = Users("mail1","1234", "johnny donoso", listas_usuario, "56969696969")
         }
 
         if (savedInstanceState != null) {
@@ -135,6 +135,12 @@ class WelcomeActivity : AppCompatActivity() {
         var intent = Intent(this,MainActivity::class.java)
         intent.putExtra("usuario_conect",loginuser)
         startActivity(intent)
+    }
+
+    fun onProfile(view : View){
+        val intent = Intent(view.context,UserInfoActivity::class.java)
+        intent.putExtra("logUser", loginuser)
+        view.context.startActivity(intent)
     }
 }
 
