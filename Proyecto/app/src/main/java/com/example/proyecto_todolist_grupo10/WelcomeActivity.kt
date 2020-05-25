@@ -81,7 +81,7 @@ class WelcomeActivity : AppCompatActivity() {
 
         (recycler_view.adapter as HistoricAdapter1).setDataset(temp_listas)
 
-        val ivUsers = findViewById<ImageView>(R.id.imageviewUser)
+        val ivUsers = findViewById<ImageView>(R.id.imageviewUser1)
         val userPhotoId = this.resources.getIdentifier("descarga", "drawable", packageName)
         ivUsers.setImageResource(userPhotoId)
         val twName = findViewById<TextView>(R.id.twnameuser)
@@ -93,14 +93,12 @@ class WelcomeActivity : AppCompatActivity() {
 
 
 
+    }
 
-        //val fis: FileInputStream = applicationContext.openFileInput("usuarios")
-        //val sis = ObjectInputStream(fis)
-        //loginuser = sis.readObject() as Users
-        //sis.close()
-        //fis.close()
-
-
+    fun onProfile(view: View){
+        var intent = Intent(this,UserInfoActivity::class.java)
+        intent.putExtra("logUser", loginuser)
+        startActivity(intent)
     }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {

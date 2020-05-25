@@ -94,13 +94,15 @@ class ItemDetail : AppCompatActivity() {
 
             builder.setPositiveButton(android.R.string.yes){ _, _ ->
                 var index1 = 0
+                var tempitem : Item = Item("",0, 0, "","",0)
                 tempList1!!.items.forEach{ it1 ->
                     if(it1.name == ItemRecive.name) {
-                        tempList1!!.items.remove(it1)
+                        tempitem = it1
                         return@forEach
                     }
                     index1 += 1
                 }
+                tempList1!!.items.remove(tempitem)
 
                 var intent = Intent(this,ToDoActivity::class.java)
                 intent.putExtra("user_log", loguser)

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout android:layout_height="match_parent"
+android:layout_width="match_parent"
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:orientation="vertical">
+<androidx.appcompat.widget.Toolbar
+    android:id="@+id/toolbar"
+    android:minHeight="?attr/actionBarSize"
+    android:background="@color/grey"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:id="@+id/btLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Atras"
+        android:onClick="onBack"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="right">
+
+    </LinearLayout>
+
+</androidx.appcompat.widget.Toolbar>
+
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/ic_person_black_24dp"
+        android:layout_gravity="center"
+        android:id="@+id/twimageviewUser"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="10dp"
+        android:textSize="24sp"
+        android:text="Nombre de usuario"
+        android:id="@+id/twnameuser"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="email"
+        android:id="@+id/twemailuser"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:layout_gravity="left"
+        android:text="Cuenta"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"/>
+
+    <Button
+        android:id="@+id/myProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginTop="10dp"
+        android:drawableLeft="@drawable/ic_format_list_bulleted_black_24dp"
+        android:drawableRight="@drawable/ic_chevron_right_black_24dp"
+        android:drawablePadding="20dp"
+        android:text="Mi Perfil"
+        android:textAlignment="textStart"
+        android:onClick="onProfile"/>
+
+    <Button
+        android:id="@+id/closeSesion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:drawableLeft="@drawable/ic_exit_to_app_black_24dp"
+        android:drawablePadding="20dp"
+        android:text="Cerrar sesion"
+        android:textAlignment="textStart"
+        android:onClick="onLogout"/>
+
+</LinearLayout>
+
+
+
+
+

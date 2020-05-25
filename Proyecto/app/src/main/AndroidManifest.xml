@@ -17,6 +17,8 @@
         <activity android:name=".CreateList" />
         <activity android:name=".WelcomeActivity" />
         <activity android:name=".ToDoActivity" />
+        <activity android:name=".UserInfoActivity"/>
+        <activity android:name=".MyProfileActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
