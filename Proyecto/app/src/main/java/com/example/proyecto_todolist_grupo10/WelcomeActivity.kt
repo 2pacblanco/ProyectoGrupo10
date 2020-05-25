@@ -49,7 +49,7 @@ class WelcomeActivity : AppCompatActivity() {
             var items = ArrayList<Item>()
             items.add(item1)
             items.add(item2)
-            val lista_usuario = Lists(items, "lista1", 0)
+            val lista_usuario = Lists(items, "lista1", 0, itemsComplete = ArrayList<Item>())
             var listas_usuario= ArrayList<Lists>()
             listas_usuario.add(lista_usuario)
             loginuser = Users("mail1","1234", "johnny donoso", listas_usuario, "56969696969")

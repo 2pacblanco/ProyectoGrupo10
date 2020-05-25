@@ -96,7 +96,6 @@ class HistoricAdapter2 (private val toDoList: ArrayList<Item>):
                     index =+1
                 }
             }
-            println(index)
             if(index>0){
                 ToDoActivity.btnlisto.visibility = View.VISIBLE
             }
@@ -127,6 +126,10 @@ class HistoricAdapter2 (private val toDoList: ArrayList<Item>):
         fun bindHistoric(item: Item){
             this.item = item
             view.twNameToDoActivity.text = item.name
+
+            if(item.estado == 1){
+                view.checkBoxItem.isChecked = true
+            }
 
 
         }
