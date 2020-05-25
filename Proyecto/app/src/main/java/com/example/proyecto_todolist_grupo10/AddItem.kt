@@ -22,6 +22,7 @@ class AddItem : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        newItem = null
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_item)
         supportActionBar?.hide()
@@ -46,14 +47,17 @@ class AddItem : AppCompatActivity() {
             if(checkPriority.isChecked && noteitem == ""){
                 newItem = Item(nameitem,0, 1,"", "25/12/2020",0)
             }
-            newItem = Item(nameitem,0, 0,"", "25/12/2020",0)
+            if(!checkPriority.isChecked && noteitem == ""){
+                newItem = Item(nameitem,0, 0,"", "25/12/2020",0)
+            }
+
+            val data = Intent().apply {
+                putExtra(ITEM, newItem!!)
+            }
+            setResult(Activity.RESULT_OK,data)
+            finish()
         }
 
-        val data = Intent().apply {
-            putExtra(ITEM, newItem!!)
-        }
-        setResult(Activity.RESULT_OK,data)
-        finish()
     }
 
     fun cancel(view: View){

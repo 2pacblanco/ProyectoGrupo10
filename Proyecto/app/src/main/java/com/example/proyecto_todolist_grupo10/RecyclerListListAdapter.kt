@@ -1,6 +1,7 @@
 package com.example.proyecto_todolist_grupo10
 
 import android.app.Dialog
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import com.example.proyecto_todolist_grupo10.model.Item
+import com.example.proyecto_todolist_grupo10.model.Lists
 import kotlinx.android.synthetic.main.custom_dialog_name.*
 import kotlinx.android.synthetic.main.to_do_cells.view.*
 import java.util.*
@@ -103,7 +105,14 @@ class HistoricAdapter2 (private val toDoList: ArrayList<Item>):
                 ToDoActivity.btnlisto.visibility = View.GONE
             }
 
+        }
 
+        holder.itemView.setOnClickListener{
+            var intent = Intent(it.context, ItemDetail::class.java)
+            intent.putExtra("Item",currentItem)
+            intent.putExtra("Lists_usurer",ToDoActivity.tempList as Lists)
+            intent.putExtra("user_log", ToDoActivity.loguser)
+            it.context.startActivity(intent)
         }
 
     }
@@ -123,13 +132,22 @@ class HistoricAdapter2 (private val toDoList: ArrayList<Item>):
 
         init{}
 
+
+
         fun bindHistoric(item: Item){
             this.item = item
+            view.imageViewPrioridad.visibility = View.GONE
             view.twNameToDoActivity.text = item.name
+
+
 
             if(item.estado == 1){
                 view.checkBoxItem.isChecked = true
             }
+            if(item.prioridad == 1){
+                view.imageViewPrioridad.visibility = View.VISIBLE
+            }
+
 
 
         }

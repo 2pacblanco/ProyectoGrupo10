@@ -1,6 +1,5 @@
 package com.example.proyecto_todolist_grupo10
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -11,15 +10,16 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.proyecto_todolist_grupo10.model.Item
 import com.example.proyecto_todolist_grupo10.model.Lists
 import com.example.proyecto_todolist_grupo10.model.Users
+import com.example.proyecto_todolist_grupo10.networking.ApiApi
+import com.example.proyecto_todolist_grupo10.networking.ApiService
 import kotlinx.android.synthetic.main.activity_welcome.*
-import kotlinx.android.synthetic.main.historic_cell.view.*
-import java.io.FileInputStream
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.FileOutputStream
-import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 
 
@@ -27,7 +27,7 @@ class WelcomeActivity : AppCompatActivity() {
 
     companion object{
 
-        var loginuser: Users? = null
+        var loginuser: Users = Users("","","","","","",ArrayList<Lists>())
         var temp_listas = ArrayList<Lists>()
 
     }
@@ -38,6 +38,7 @@ class WelcomeActivity : AppCompatActivity() {
         val temper : Users? = intent.getSerializableExtra("logUser") as? Users
 
         val tempList = intent.getSerializableExtra("newList") as? ArrayList<Lists>
+
 
         if(temper !=  null){
             loginuser = temper
@@ -52,16 +53,18 @@ class WelcomeActivity : AppCompatActivity() {
             val lista_usuario = Lists(items, "lista1", 0, itemsComplete = ArrayList<Item>())
             var listas_usuario= ArrayList<Lists>()
             listas_usuario.add(lista_usuario)
-            loginuser = Users("mail1","1234", "johnny donoso", listas_usuario)
+
+
+
+            println(loginuser.toString())
+            loginuser!!.UsersLists = listas_usuario
         }
 
         if (savedInstanceState != null) {
-            // Restore value of members from saved state
             loginuser = savedInstanceState.getSerializable("user_log") as Users
         }
 
         if(tempList != null){
-            println("entra aqui tbm pomchirimoya" )
             loginuser!!.UsersLists = tempList
         }
 
@@ -136,6 +139,7 @@ class WelcomeActivity : AppCompatActivity() {
         intent.putExtra("usuario_conect",loginuser)
         startActivity(intent)
     }
+
 }
 
 

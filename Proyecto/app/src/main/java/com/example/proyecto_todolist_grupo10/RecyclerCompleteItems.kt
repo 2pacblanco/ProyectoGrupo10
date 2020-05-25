@@ -50,10 +50,14 @@ class HistoricAdapter3 (private val completeItems: ArrayList<Item>):
         fun bindHistoric(item: Item){
             this.item = item
             view.twNameCompleteItem.text = item.name
+            view.imageViewCompleteItemPriority.visibility = View.GONE
 
             view.twNameCompleteItem.paintFlags = view.twNameCompleteItem.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
             view.checkBoxItem2.isChecked = true
 
+            if(item.prioridad == 1){
+                view.imageViewCompleteItemPriority.visibility = View.VISIBLE
+            }
 
         }
 

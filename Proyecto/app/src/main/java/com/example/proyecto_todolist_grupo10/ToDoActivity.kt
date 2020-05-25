@@ -45,8 +45,6 @@ class ToDoActivity : AppCompatActivity() {
 
         tempList = list
 
-
-
         val newlist1 = ArrayList<Item>()
 
         tempList!!.items.forEach{
@@ -66,14 +64,6 @@ class ToDoActivity : AppCompatActivity() {
         recycler_view2.adapter = HistoricAdapter3(tempList!!.itemsComplete!!)
         recycler_view2.layoutManager = LinearLayoutManager(this)
         (recycler_view2.adapter as HistoricAdapter3).setDataset(complete_items)
-
-
-
-
-
-        complete_items.forEach {
-            println(it.name)
-        }
 
 
         recycler_view.adapter = HistoricAdapter2(tempList!!.items)
@@ -114,41 +104,31 @@ class ToDoActivity : AppCompatActivity() {
                     newlist1.add(it)
                 }
             }
-
             //tempList!!.items = newlist1
-
             Toast.makeText(applicationContext, "Items completados existosamente!!", Toast.LENGTH_SHORT).show()
             var intent = Intent(this,ToDoActivity::class.java)
             intent.putExtra("user_log", loguser)
             intent.putExtra("List", tempList)
             startActivity(intent)
         }
-
-
-
         btNewItem.setOnClickListener {
             startActivityForResult(AddItem.newInstance1(this), 1)
         }
-
-
-
-
-
-
         recycler_view2.visibility = View.GONE
-
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if ( resultCode == Activity.RESULT_OK) {
-            data?.apply {
-                var item = getSerializableExtra(AddItem.ITEM) as Item
-                tempList!!.items.add(item)
-                recycler_view.adapter?.notifyDataSetChanged()
-
+            if(requestCode==1){
+                println("entramos al requestCode == 1")
+                data?.apply {
+                    var item = getSerializableExtra(AddItem.ITEM) as Item
+                    tempList!!.items.add(item)
+                    recycler_view.adapter?.notifyDataSetChanged()
+                }
             }
+
         }
 
     }

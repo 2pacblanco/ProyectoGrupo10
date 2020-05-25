@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
+import android.widget.Toast
 import com.example.proyecto_todolist_grupo10.model.Item
 import com.example.proyecto_todolist_grupo10.model.Lists
 import kotlinx.android.synthetic.main.activity_create_list.*
@@ -28,19 +29,28 @@ class CreateList : AppCompatActivity() {
     fun createList(view: View) {
         var items = mutableListOf<Item>()
 
+        var inputname = inputNameOfList.text.toString()
+
         items.add(Item("item creado automáticamente 1", 0, 0, "Bueno, esta es la nota generada automaticamente al crear la lista", "25/12/2020",0))
         items.add(Item("item creado automáticamente 2", 0, 0, "Bueno, esta es la nota generada automaticamente al crear la lista", "25/12/2020",0))
         items.add(Item("item creado automáticamente 3", 0, 0, "Bueno, esta es la nota generada automaticamente al crear la lista", "25/12/2020",0))
         items.add(Item("item creado automáticamente 4", 0, 0, "Bueno, esta es la nota generada automaticamente al crear la lista", "25/12/2020",0))
 
-        val list = Lists(items as ArrayList<Item>,inputNameOfList.text.toString(),position = 0,
-                itemsComplete = ArrayList<Item>()
-        )
-        val data = Intent().apply {
-            putExtra(LIST,list)
+
+        if (inputname == ""){
+            Toast.makeText(this.applicationContext, "Ingrese nombre, es obligatorio para crear una lista", Toast.LENGTH_SHORT).show()
         }
-        setResult(Activity.RESULT_OK,data)
-        finish()
+        else{
+            val list = Lists(items as ArrayList<Item>,inputname,position = 0,
+                itemsComplete = ArrayList<Item>()
+            )
+            val data = Intent().apply {
+                putExtra(LIST,list)
+            }
+            setResult(Activity.RESULT_OK,data)
+            finish()
+        }
+
     }
 
     fun cancel(view: View){
