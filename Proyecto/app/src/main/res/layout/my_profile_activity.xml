@@ -16,7 +16,7 @@
             android:id="@+id/btLogout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Log Out"
+            android:text="Atras"
             android:onClick="onBack"/>
 
     </androidx.appcompat.widget.Toolbar>
