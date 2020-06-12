@@ -37,13 +37,13 @@ class MyProfileActivity : AppCompatActivity() {
         twPhone.text = loginuser!!.phone
 
         btnChangeName.setOnClickListener{
-            val dialog = Dialog(it.context)
+            val dialog = Dialog(applicationContext)
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
             dialog.setCancelable(false)
             dialog.setContentView(R.layout.custom_dialog_change_name_user)
             val cancelButton: Button = dialog.findViewById(R.id.btnCancel) as Button
             val confirmButton: Button = dialog.findViewById(R.id.btnConfirm) as Button
-            cancelButton.setOnClickListener({ dialog.dismiss() })
+            cancelButton.setOnClickListener { dialog.dismiss() }
             confirmButton.setOnClickListener {
                 loginuser!!.name = dialog.etNewNameUser.text.toString()
                 twName.text = dialog.etNewNameUser.text.toString() +" "+ loginuser!!.last_name
@@ -52,13 +52,13 @@ class MyProfileActivity : AppCompatActivity() {
             dialog.show()
         }
         btnChangePhone.setOnClickListener{
-            val dialog = Dialog(it.context)
+            val dialog = Dialog(applicationContext)
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
             dialog.setCancelable(false)
             dialog.setContentView(R.layout.custom_dialog_change_phone_user)
             val cancelButton: Button = dialog.findViewById(R.id.btnCancel) as Button
             val confirmButton: Button = dialog.findViewById(R.id.btnConfirm) as Button
-            cancelButton.setOnClickListener({ dialog.dismiss() })
+            cancelButton.setOnClickListener { dialog.dismiss() }
             confirmButton.setOnClickListener {
                 loginuser!!.phone = dialog.etNewPhone.text.toString()
                 twPhone.text = dialog.etNewNameUser.text.toString()

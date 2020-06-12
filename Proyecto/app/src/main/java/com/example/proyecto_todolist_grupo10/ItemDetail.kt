@@ -1,30 +1,40 @@
 package com.example.proyecto_todolist_grupo10
 
 import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.widget.Button
+import android.widget.DatePicker
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.core.view.get
 import com.example.proyecto_todolist_grupo10.model.Item
 import com.example.proyecto_todolist_grupo10.model.Lists
 import com.example.proyecto_todolist_grupo10.model.Users
 import kotlinx.android.synthetic.main.activity_item_detail.*
 import kotlinx.android.synthetic.main.custom_dialog_changenote.*
-import kotlinx.android.synthetic.main.custom_dialog_name.*
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.util.*
 
 class ItemDetail : AppCompatActivity() {
 
     companion object{
-        var ItemRecive : Item= Item("", 0, 0,"","",0)
+        @RequiresApi(Build.VERSION_CODES.O)
+        var ItemRecive : Item= Item("", 0, 0,"", LocalDate.now().plusDays(30),LocalDate.now(),0)
         var loguser : Users? = null
         var tempList1 : Lists? = null
+        var cal: Calendar = Calendar.getInstance()
+
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item_detail)
@@ -45,9 +55,35 @@ class ItemDetail : AppCompatActivity() {
         if(ItemRecive.prioridad==0){
             imageViewPrioridadItem.visibility = View.GONE
         }
+        twFechaItem.setText(ItemRecive.plazo.toString())
         twNotasItem.text = ItemRecive.notas
+        fechacreacion.text = "Creado el "+ItemRecive.create_at.toString()
 
         //edicion de fecha lo veremos en un rato
+
+        val dateSetListener = object : DatePickerDialog.OnDateSetListener {
+            override fun onDateSet(view: DatePicker, year: Int, monthOfYear: Int,
+                                   dayOfMonth: Int) {
+                cal.set(Calendar.YEAR, year)
+                cal.set(Calendar.MONTH, monthOfYear)
+                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                updateDateInView()
+            }
+        }
+
+        twFechaItem.setOnClickListener{
+            val picker = DatePickerDialog(this,
+                dateSetListener,
+                // set DatePickerDialog to point to today's date when it loads up
+                cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH))
+            picker.show()
+
+
+        }
+
+
 
 
 
@@ -94,7 +130,7 @@ class ItemDetail : AppCompatActivity() {
 
             builder.setPositiveButton(android.R.string.yes){ _, _ ->
                 var index1 = 0
-                var tempitem : Item = Item("",0, 0, "","",0)
+                var tempitem : Item = Item("",0, 0, "",LocalDate.now().plusDays(30),LocalDate.now(),0)
                 tempList1!!.items.forEach{ it1 ->
                     if(it1.name == ItemRecive.name) {
                         tempitem = it1
@@ -158,6 +194,23 @@ class ItemDetail : AppCompatActivity() {
 
 
 
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun updateDateInView() {
+        val myFormat = "yyyy-MM-dd" // mention the format you need
+        val sdf = SimpleDateFormat(myFormat, Locale.US)
+        twFechaItem!!.setText(sdf.format(cal.time))
+
+        if (LocalDate.now() < LocalDate.parse(twFechaItem.text.toString())) {
+            ItemRecive.plazo = LocalDate.parse(twFechaItem.text.toString())
+            Toast.makeText(this, "Fecha de plazo cambiada correctamente", Toast.LENGTH_SHORT).show()
+        }
+        else{
+            twFechaItem!!.setText(ItemRecive.plazo.toString())
+            Toast.makeText(this, "no se pudo crear el nuevo plazo ya que es anterior a la fecha de hoy", Toast.LENGTH_SHORT).show()
+        }
 
     }
 }

@@ -3,11 +3,13 @@ package com.example.proyecto_todolist_grupo10
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.proyecto_todolist_grupo10.model.Item
@@ -21,6 +23,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.FileOutputStream
 import java.io.ObjectOutputStream
+import java.time.LocalDate
 
 
 class WelcomeActivity : AppCompatActivity() {
@@ -32,6 +35,7 @@ class WelcomeActivity : AppCompatActivity() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -45,8 +49,8 @@ class WelcomeActivity : AppCompatActivity() {
         }
         else{
             println("entra aqui hgablando como shoro kjiee tu vas al rancho puro mochila")
-            val item1 = Item("item1", 0, 0, "Bueno, esta es la nota generada automaticamente al crear la lista", "25/12/2020",0)
-            val item2 = Item("item2", 0, 0, "Bueno, esta es la nota generada automaticamente al crear la lista", "25/12/2020",0)
+            val item1 = Item("item1", 0, 0, "Bueno, esta es la nota generada automaticamente al crear la lista", LocalDate.now().plusDays(30),LocalDate.now(),0)
+            val item2 = Item("item2", 0, 0, "Bueno, esta es la nota generada automaticamente al crear la lista",LocalDate.now().plusDays(30), LocalDate.now(),0)
             var items = ArrayList<Item>()
             items.add(item1)
             items.add(item2)
