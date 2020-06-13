@@ -37,7 +37,7 @@ class MyProfileActivity : AppCompatActivity() {
         twPhone.text = loginuser!!.phone
 
         btnChangeName.setOnClickListener{
-            val dialog = Dialog(applicationContext)
+            val dialog = Dialog(it.context)
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
             dialog.setCancelable(false)
             dialog.setContentView(R.layout.custom_dialog_change_name_user)
@@ -52,7 +52,7 @@ class MyProfileActivity : AppCompatActivity() {
             dialog.show()
         }
         btnChangePhone.setOnClickListener{
-            val dialog = Dialog(applicationContext)
+            val dialog = Dialog(it.context)
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
             dialog.setCancelable(false)
             dialog.setContentView(R.layout.custom_dialog_change_phone_user)
