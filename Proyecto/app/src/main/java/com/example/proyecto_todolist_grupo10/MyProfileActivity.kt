@@ -7,6 +7,7 @@ import android.view.View
 import android.view.Window
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.proyecto_todolist_grupo10.model.Users
 import kotlinx.android.synthetic.main.custom_dialog_change_name_user.*
@@ -60,9 +61,27 @@ class MyProfileActivity : AppCompatActivity() {
             val confirmButton: Button = dialog.findViewById(R.id.btnConfirm) as Button
             cancelButton.setOnClickListener { dialog.dismiss() }
             confirmButton.setOnClickListener {
-                loginuser!!.phone = dialog.etNewPhone.text.toString()
-                twPhone.text = dialog.etNewNameUser.text.toString()
-                dialog.dismiss()
+                val checkNumber = dialog.etNewPhone.text.toString()
+                var numeric = true
+                numeric = checkNumber.matches("-?\\d+(\\.\\d+)?".toRegex())
+                if (numeric){
+                    if (checkNumber.length == 8) {
+                        loginuser!!.phone = dialog.etNewPhone.text.toString()
+                        twPhone.text = "+56 9 "+ dialog.etNewPhone.text.toString()
+                        dialog.dismiss()
+                    }
+                    else{
+                        Toast.makeText(this, "Largo del numero debe ser 8", Toast.LENGTH_SHORT).show()
+                        dialog.dismiss()
+                    }
+                }
+
+                else{
+                    Toast.makeText(this, "No es un numero valido", Toast.LENGTH_SHORT).show()
+                    dialog.dismiss()
+                }
+
+
             }
             dialog.show()
         }
