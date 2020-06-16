@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:orientation="horizontal">
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/twNameItem"
                 android:layout_width="250dp"
                 android:gravity="center"
@@ -41,7 +41,7 @@
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/fechacreacion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
         android:layout_marginTop="20dp"
         android:layout_gravity="center_horizontal"/>
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
         android:background="@color/grey"
         android:orientation="vertical">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:layout_marginTop="15dp"
             android:id="@+id/twFechaItem"
             android:focusable="false"
@@ -78,7 +78,7 @@
             android:gravity="center_vertical"/>
     </LinearLayout>
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:layout_marginTop="40dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -102,7 +102,7 @@
             app:srcCompat="@android:drawable/btn_star_big_on" />
     </LinearLayout>
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:layout_marginTop="40dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -118,7 +118,7 @@
         android:background="@layout/border1"
         android:orientation="vertical">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/twNotasItem"
             android:layout_marginTop="5dp"
             android:layout_width="wrap_content"

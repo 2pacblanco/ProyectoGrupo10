@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.923">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/twLogin"
             android:layout_width="wrap_content"
             android:layout_marginBottom="5dp"
@@ -29,7 +29,7 @@
             android:text="Login"
             android:textSize="30sp" />
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etMail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
             android:ems="10"
             android:inputType="textEmailAddress" />
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,6 +53,8 @@
             android:layout_marginBottom="15dp"
             android:layout_height="wrap_content"
             android:onClick="onLogin"
+            android:textSize="20sp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
             android:text="Ingresar" />
 
         <TextView
@@ -63,7 +65,7 @@
 
     </LinearLayout>
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/twRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

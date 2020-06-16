@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:layout_marginTop="60dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,7 +14,7 @@
         android:textSize="25sp"
         android:layout_gravity="center_horizontal"/>
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:layout_marginTop="40dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,14 +22,14 @@
         android:text="Ingrese nombre de nuevo item(Obligatorio): "
         android:layout_gravity="center_horizontal"/>
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:layout_marginTop="10dp"
         android:id="@+id/NameItem"
         android:layout_width="250dp"
         android:layout_gravity="center_horizontal"
         android:layout_height="wrap_content"/>
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:orientation="horizontal">
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:layout_marginLeft="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
             android:layout_weight="1"
             />
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/NoteItem"
             android:layout_width="250dp"
             android:layout_weight="1"
@@ -66,7 +66,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:layout_marginLeft="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
             android:layout_weight="1"
             />
 
-        <CheckBox
+        <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/checkBoxPrioridad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

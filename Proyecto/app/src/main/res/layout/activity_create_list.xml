@@ -11,14 +11,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:ignore="MissingConstraints">
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:layout_marginTop="200dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:textSize="20sp"
             android:text="Ingrese el nombre de la nueva Lista"/>
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:layout_marginTop="40dp"
             android:id="@+id/inputNameOfList"
             android:layout_gravity="center_horizontal"
@@ -53,7 +53,7 @@
 
 
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:layout_marginTop="30dp"
             android:layout_width="wrap_content"
             android:layout_gravity="center_horizontal"

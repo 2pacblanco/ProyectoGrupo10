@@ -7,13 +7,13 @@
     android:orientation="horizontal"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <CheckBox
+    <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/checkBoxItem2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/twNameCompleteItem"
         android:layout_width="210dp"
         android:layout_height="wrap_content"
