@@ -1,8 +1,13 @@
 package com.example.proyecto_todolist_grupo10
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
+import android.os.AsyncTask
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,6 +16,8 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import com.example.proyecto_todolist_grupo10.MainActivity.Companion.fusedLocationClient1
 import com.example.proyecto_todolist_grupo10.model.Item
 import com.example.proyecto_todolist_grupo10.model.Lists
 import kotlinx.android.synthetic.main.activity_create_list.*
@@ -32,34 +39,48 @@ class AddItem : AppCompatActivity() {
 
     }
 
+    @SuppressLint("MissingPermission")
     @RequiresApi(Build.VERSION_CODES.O)
     fun createItem(view: View) {
         val nameitem :String = findViewById<EditText>(R.id.NameItem).text.toString()
         val noteitem : String = findViewById<EditText>(R.id.NoteItem).text.toString()
         val checkPriority : CheckBox = findViewById<CheckBox>(R.id.checkBoxPrioridad)
 
+        //asignar latitude y longitude
+        var latitude1 : Double  = 0.0
+        var longitude1 : Double = 0.0
+
         if(nameitem == ""){
             Toast.makeText(this.applicationContext, "Ingrese nombre, es obligatorio para crear un item", Toast.LENGTH_SHORT).show()
         }
         else{
             if( checkPriority.isChecked && noteitem != ""){
-                    newItem = Item(nameitem,0, 1,noteitem, LocalDate.now().plusDays(30) ,LocalDate.now(), 0)
+                newItem = Item(nameitem,0, 1,noteitem, LocalDate.now().plusDays(30) ,LocalDate.now(), 0,0.0,0.0)
             }
             if(!checkPriority.isChecked && noteitem != ""){
-                newItem = Item(nameitem,0, 0,noteitem,LocalDate.now().plusDays(30) ,LocalDate.now(),0)
+                newItem = Item(nameitem,0, 0,noteitem,LocalDate.now().plusDays(30) ,LocalDate.now(),0,0.0,0.0)
             }
             if(checkPriority.isChecked && noteitem == ""){
-                newItem = Item(nameitem,0, 1,"", LocalDate.now().plusDays(30),LocalDate.now(),0)
+                newItem = Item(nameitem,0, 1,"", LocalDate.now().plusDays(30),LocalDate.now(),0,0.0,0.0)
             }
             if(!checkPriority.isChecked && noteitem == ""){
-                newItem = Item(nameitem,0, 0,"", LocalDate.now().plusDays(30),LocalDate.now(),0)
+                newItem = Item(nameitem,0, 0,"", LocalDate.now().plusDays(30),LocalDate.now(),0,0.0,0.0)
             }
 
-            val data = Intent().apply {
-                putExtra(ITEM, newItem!!)
-            }
-            setResult(Activity.RESULT_OK,data)
-            finish()
+            fusedLocationClient1.lastLocation
+                .addOnSuccessListener { location : Location? ->
+                    latitude1 = location!!.latitude
+                    longitude1 = location!!.longitude
+                    println(latitude1.toString() + longitude1.toString())
+                    newItem!!.latitude = latitude1
+                    newItem!!.longitude = longitude1
+                    val data = Intent().apply {
+                        putExtra(ITEM, newItem!!)
+                    }
+                    setResult(Activity.RESULT_OK,data)
+                    finish()
+                }
+
         }
 
     }

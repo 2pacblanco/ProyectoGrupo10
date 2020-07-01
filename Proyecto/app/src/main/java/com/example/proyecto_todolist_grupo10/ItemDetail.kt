@@ -1,9 +1,13 @@
 package com.example.proyecto_todolist_grupo10
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.AsyncTask
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,10 +17,20 @@ import android.widget.Button
 import android.widget.DatePicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import androidx.core.view.get
 import com.example.proyecto_todolist_grupo10.model.Item
 import com.example.proyecto_todolist_grupo10.model.Lists
 import com.example.proyecto_todolist_grupo10.model.Users
+import com.example.proyecto_todolist_grupo10.util.LocationUtil
+import androidx.lifecycle.Observer
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
 import kotlinx.android.synthetic.main.activity_item_detail.*
 import kotlinx.android.synthetic.main.custom_dialog_changenote.*
 import java.text.SimpleDateFormat
@@ -27,10 +41,16 @@ class ItemDetail : AppCompatActivity() {
 
     companion object{
         @RequiresApi(Build.VERSION_CODES.O)
-        var ItemRecive : Item= Item("", 0, 0,"", LocalDate.now().plusDays(30),LocalDate.now(),0)
+        var ItemRecive : Item= Item("", 0, 0,"", LocalDate.now().plusDays(30),LocalDate.now(),0,0.0,0.0)
         var loguser : Users? = null
         var tempList1 : Lists? = null
         var cal: Calendar = Calendar.getInstance()
+
+        lateinit var mMap: GoogleMap
+        lateinit var locationData: LocationUtil
+        var LOCATION_PERMISSION = 100
+
+
 
     }
 
@@ -46,6 +66,13 @@ class ItemDetail : AppCompatActivity() {
         ItemRecive = intent.getSerializableExtra("Item") as Item
         loguser = intent.getSerializableExtra("user_log") as Users
         tempList1 = intent.getSerializableExtra("Lists_usurer") as Lists
+
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync { googleMap ->
+            mMap = googleMap
+        }
+        invokeLocationAction(ItemRecive)
 
         //seteo de variables
         twNameItem.text = ItemRecive.name
@@ -130,7 +157,7 @@ class ItemDetail : AppCompatActivity() {
 
             builder.setPositiveButton(android.R.string.yes){ _, _ ->
                 var index1 = 0
-                var tempitem : Item = Item("",0, 0, "",LocalDate.now().plusDays(30),LocalDate.now(),0)
+                var tempitem : Item = Item("",0, 0, "",LocalDate.now().plusDays(30),LocalDate.now(),0,0.0,0.0)
                 tempList1!!.items.forEach{ it1 ->
                     if(it1.name == ItemRecive.name) {
                         tempitem = it1
@@ -192,10 +219,74 @@ class ItemDetail : AppCompatActivity() {
             startActivity(intent)
         }
 
-
-
-
     }
+
+    private fun invokeLocationAction(item: Item) {
+
+
+            when {
+                isPermissionsGranted() -> locationData.observe(this, Observer {
+                    println("${item.latitude} , ${item.longitude}")
+
+                    MainActivity.fusedLocationClient1 = LocationServices.getFusedLocationProviderClient(this)
+
+
+                    val polylineOptions = PolylineOptions().clickable(false).color(R.color.colorAccent).geodesic(true)
+                        .width(10f)
+
+                    mMap.addMarker(MarkerOptions().position(LatLng(item.latitude, item.longitude)).title(item.name))
+                    polylineOptions.add(LatLng(item.latitude,item.longitude))
+                    mMap.addPolyline(polylineOptions)
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(item.latitude,item.longitude), 12.0f))
+
+                })
+
+
+                shouldShowRequestPermissionRationale() -> println("Ask Permission")
+
+                else -> ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ),
+                    LOCATION_PERMISSION
+                )
+            }
+        }
+
+    @SuppressLint("MissingPermission")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            LOCATION_PERMISSION -> {
+                invokeLocationAction(ItemRecive)
+            }
+        }
+    }
+
+    private fun isPermissionsGranted() =
+        ActivityCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+
+    private fun shouldShowRequestPermissionRationale() =
+        ActivityCompat.shouldShowRequestPermissionRationale(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) && ActivityCompat.shouldShowRequestPermissionRationale(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun updateDateInView() {

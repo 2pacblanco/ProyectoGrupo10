@@ -10,7 +10,9 @@ data class Users(@SerializedName("email") var email: String, val pass: String, @
 
 data class Lists(var items: ArrayList<Item>, val name: String, val position: Int, var itemsComplete: ArrayList<Item>?): Serializable {}
 
-data class Item(var name: String, var estado: Int, var prioridad: Int, var notas : String , var plazo: LocalDate, var create_at : LocalDate, var check : Int): Serializable {}
+data class LocationObject( val longitude: Double, val latitude: Double)
+
+data class Item(var name: String, var estado: Int, var prioridad: Int, var notas : String, var plazo: LocalDate, var create_at : LocalDate, var check : Int, var latitude : Double, var longitude : Double): Serializable {}
 
 
 public class UserList {

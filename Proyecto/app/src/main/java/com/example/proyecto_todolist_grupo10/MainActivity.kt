@@ -8,6 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.proyecto_todolist_grupo10.model.Users
 import com.example.proyecto_todolist_grupo10.networking.ApiApi
 import com.example.proyecto_todolist_grupo10.networking.ApiService
+import com.example.proyecto_todolist_grupo10.util.LocationUtil
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -17,12 +20,17 @@ class MainActivity : AppCompatActivity() {
 
     companion object{
         var logUser : Users? = null
+        lateinit var fusedLocationClient1: FusedLocationProviderClient
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
+
+        fusedLocationClient1 = LocationServices.getFusedLocationProviderClient(this)
+        ItemDetail.locationData = LocationUtil(this)
 
         val user: Users? = intent.getSerializableExtra("usuario_conect") as? Users
 
