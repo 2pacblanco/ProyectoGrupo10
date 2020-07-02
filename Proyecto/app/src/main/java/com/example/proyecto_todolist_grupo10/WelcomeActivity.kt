@@ -34,7 +34,7 @@ class WelcomeActivity : AppCompatActivity() {
     companion object{
         var latitude1 : Double = 0.0
         var longitude1 : Double = 0.0
-        var loginuser: Users = Users("","","","","","",ArrayList<Lists>())
+        var loginuser: Users = Users("","","","","","","","","", ArrayList<Lists>())
         var temp_listas = ArrayList<Lists>()
 
     }
@@ -53,6 +53,16 @@ class WelcomeActivity : AppCompatActivity() {
             loginuser = temper
         }
         else{
+            //sacar listas de la api
+            // GET LISTS --> lista de listas del usuario
+
+
+
+
+
+
+
+            //este código nos servirá para rellenar la location de los items sacados de la apí
             val item1 = Item("item1", 0, 0, "Bueno, esta es la nota generada automaticamente al crear la lista", LocalDate.now().plusDays(30),LocalDate.now(),0,latitude1,longitude1)
             val item2 = Item("item2", 0, 0, "Bueno, esta es la nota generada automaticamente al crear la lista",LocalDate.now().plusDays(30), LocalDate.now(),0,latitude1,longitude1)
             var items = ArrayList<Item>()
@@ -68,7 +78,9 @@ class WelcomeActivity : AppCompatActivity() {
                 }
             items.add(item1)
             items.add(item2)
+            //hasta acá
 
+            //acá creamos una lista, genérica, esto tenemos que rellenarlo con la info de la api
             val lista_usuario = Lists(items, "lista1", 0, itemsComplete = ArrayList<Item>())
             var listas_usuario= ArrayList<Lists>()
             listas_usuario.add(lista_usuario)

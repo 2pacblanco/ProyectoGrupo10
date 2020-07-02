@@ -5,9 +5,12 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.proyecto_todolist_grupo10.configuration.api_key
 import com.example.proyecto_todolist_grupo10.model.Users
 import com.example.proyecto_todolist_grupo10.networking.ApiApi
 import com.example.proyecto_todolist_grupo10.networking.ApiService
+import com.example.proyecto_todolist_grupo10.networking.HerokuApi
+import com.example.proyecto_todolist_grupo10.networking.HerokuApiService
 import com.example.proyecto_todolist_grupo10.util.LocationUtil
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -38,9 +41,10 @@ class MainActivity : AppCompatActivity() {
             logUser = user
         }
 
-        val request = ApiService.buildService(ApiApi::class.java)
+        //actualizado a la api de entrega 3
+        val request = HerokuApiService.buildService(HerokuApi::class.java)
 
-        val call = request.getUser()
+        val call = request.getUser(api_key)
         call.enqueue(object : Callback<Users> {
             override fun onResponse(call: Call<Users>, response: Response<Users>) {
                 if (response.isSuccessful) {
@@ -58,7 +62,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this@MainActivity, "${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
-
+        println(WelcomeActivity.loginuser.toString())
 
     }
 

@@ -10,7 +10,7 @@ import retrofit2.http.Query
 interface HerokuApi {
 
     @GET("/users/get_self")
-    fun getUser(@Header("Authorization") key: String?): Call<Users>
+    fun getUser(@Header("token") token: String?): Call<Users>
 
     @GET("/lists")
     fun getLists(@Header("Authorization")key: String?, @Query("loginuser") loginuser: Users?): Call<JsonArray>

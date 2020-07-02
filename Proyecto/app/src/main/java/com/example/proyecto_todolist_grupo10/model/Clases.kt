@@ -5,7 +5,7 @@ import java.io.Serializable
 import java.text.DateFormat
 import java.time.LocalDate
 
-data class Users(@SerializedName("email") var email: String, val pass: String, @SerializedName("name") var name: String, @SerializedName("last_name") var last_name : String, @SerializedName("phone") var phone : String,@SerializedName("profile_photo") var profile_photo : String, var UsersLists: ArrayList<Lists>):
+data class Users(@SerializedName("email") var email: String, val pass: String, @SerializedName("first_name") var name: String, @SerializedName("last_name") var last_name : String, @SerializedName("phone") var phone : String,@SerializedName("profile_photo") var profile_photo : String,@SerializedName("api_key") var api_key : String,@SerializedName("created_at") var created_at : String, @SerializedName("updated_at") var updated_at : String,var UsersLists: ArrayList<Lists>):
     Serializable {}
 
 data class Lists(var items: ArrayList<Item>, val name: String, val position: Int, var itemsComplete: ArrayList<Item>?): Serializable {}
