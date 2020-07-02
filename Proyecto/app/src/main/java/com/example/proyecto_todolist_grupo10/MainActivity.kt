@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this@MainActivity, "${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
-        println(WelcomeActivity.loginuser.toString())
+        //println(WelcomeActivity.loginuser.toString())
 
     }
 

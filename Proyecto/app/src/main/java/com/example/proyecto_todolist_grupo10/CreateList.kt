@@ -61,9 +61,8 @@ class CreateList : AppCompatActivity() {
                     Toast.makeText(this.applicationContext, "Ingrese nombre, es obligatorio para crear una lista", Toast.LENGTH_SHORT).show()
                 }
                 else{
-                    val list = Lists(items as ArrayList<Item>,inputname,position = 0,
-                        itemsComplete = ArrayList<Item>()
-                    )
+                    val list = Lists("1",inputname, "1","asda","asdasd", items,
+                        ArrayList<Item>())
                     val data = Intent().apply {
                         putExtra(LIST,list)
                     }

@@ -15,11 +15,16 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.proyecto_todolist_grupo10.MainActivity.Companion.fusedLocationClient1
+import com.example.proyecto_todolist_grupo10.configuration.RestApiService
+import com.example.proyecto_todolist_grupo10.configuration.api_key
 import com.example.proyecto_todolist_grupo10.model.Item
 import com.example.proyecto_todolist_grupo10.model.Lists
+import com.example.proyecto_todolist_grupo10.model.ListsList
 import com.example.proyecto_todolist_grupo10.model.Users
 import com.example.proyecto_todolist_grupo10.networking.ApiApi
 import com.example.proyecto_todolist_grupo10.networking.ApiService
+import com.example.proyecto_todolist_grupo10.networking.HerokuApi
+import com.example.proyecto_todolist_grupo10.networking.HerokuApiService
 import kotlinx.android.synthetic.main.activity_welcome.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -51,42 +56,56 @@ class WelcomeActivity : AppCompatActivity() {
 
         if(temper !=  null){
             loginuser = temper
+            //println(loginuser.toString())
+
         }
         else{
             //sacar listas de la api
+            var listas_usuario= ArrayList<Lists>()
             // GET LISTS --> lista de listas del usuario
+            val request = HerokuApiService.buildService(HerokuApi::class.java)
 
-
-
-
-
+            val call = request.getLists(api_key)
+            call.enqueue(object : Callback<ArrayList<Lists>> {
+                override fun onResponse(call: Call<ArrayList<Lists>>, response: Response<ArrayList<Lists>>) {
+                    if (response.isSuccessful) {
+                        if (response.body() != null) {
+                            val lists =  response.body()!!
+                            lists.forEach {
+                                println("$it  --> Agregada al usuario")
+                                listas_usuario.add(it)
+                            }
+                            loginuser!!.UsersLists = listas_usuario
+                        }
+                    }
+                }
+                override fun onFailure(call: Call<ArrayList<Lists>>, t: Throwable) {
+                    Toast.makeText(this@WelcomeActivity, "${t.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
 
 
             //este código nos servirá para rellenar la location de los items sacados de la apí
-            val item1 = Item("item1", 0, 0, "Bueno, esta es la nota generada automaticamente al crear la lista", LocalDate.now().plusDays(30),LocalDate.now(),0,latitude1,longitude1)
-            val item2 = Item("item2", 0, 0, "Bueno, esta es la nota generada automaticamente al crear la lista",LocalDate.now().plusDays(30), LocalDate.now(),0,latitude1,longitude1)
-            var items = ArrayList<Item>()
-            fusedLocationClient1.lastLocation
-                .addOnSuccessListener { location : Location? ->
-                    latitude1 = location!!.latitude
-                    longitude1 = location!!.longitude
-                    println(latitude1.toString() + longitude1.toString())
-                    item1.latitude = latitude1
-                    item1.longitude = longitude1
-                    item2.latitude = latitude1
-                    item2.longitude = longitude1
-                }
-            items.add(item1)
-            items.add(item2)
+            //val item1 = Item("item1", 0, 0, "Bueno, esta es la nota generada automaticamente al crear la lista", LocalDate.now().plusDays(30),LocalDate.now(),0,latitude1,longitude1)
+            //val item2 = Item("item2", 0, 0, "Bueno, esta es la nota generada automaticamente al crear la lista",LocalDate.now().plusDays(30), LocalDate.now(),0,latitude1,longitude1)
+            //var items = ArrayList<Item>()
+            //fusedLocationClient1.lastLocation
+              //  .addOnSuccessListener { location : Location? ->
+                //    latitude1 = location!!.latitude
+                  //  longitude1 = location!!.longitude
+                    //println(latitude1.toString() + longitude1.toString())
+                    //item1.latitude = latitude1
+                    //item1.longitude = longitude1
+                    //item2.latitude = latitude1
+                    //item2.longitude = longitude1
+                //}
+            //items.add(item1)
+            //items.add(item2)
             //hasta acá
 
             //acá creamos una lista, genérica, esto tenemos que rellenarlo con la info de la api
-            val lista_usuario = Lists(items, "lista1", 0, itemsComplete = ArrayList<Item>())
-            var listas_usuario= ArrayList<Lists>()
-            listas_usuario.add(lista_usuario)
-
             println(loginuser.toString())
-            loginuser!!.UsersLists = listas_usuario
+
         }
 
         if (savedInstanceState != null) {
@@ -142,6 +161,12 @@ class WelcomeActivity : AppCompatActivity() {
         if ( resultCode == Activity.RESULT_OK) {
             data?.apply {
                 var list = getSerializableExtra(CreateList.LIST) as Lists
+                //método post para ingresar lista a la api
+                val apiService = RestApiService()
+
+                apiService.addLists(list){
+                    println(it.toString())
+                }
                 temp_listas.add(list!!)
                 recycler_view.adapter?.notifyDataSetChanged()
                 loginuser!!.UsersLists = temp_listas
