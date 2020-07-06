@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "179568850773",
+    "firebase_url": "https://proyectogrupo10-c1483.firebaseio.com",
+    "project_id": "proyectogrupo10-c1483",
+    "storage_bucket": "proyectogrupo10-c1483.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:179568850773:android:606d3393cd43b9c9fea1dc",
+        "android_client_info": {
+          "package_name": "com.example.proyecto_todolist_grupo10"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "179568850773-6mbc3ivk5eaasbc6dfmjlfhh87uk6luo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0XVUWUfT13AlXoHqNvRjhRgb3fEIelpQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "179568850773-6mbc3ivk5eaasbc6dfmjlfhh87uk6luo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

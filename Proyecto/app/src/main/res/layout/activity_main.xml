@@ -52,16 +52,15 @@
             android:layout_width="wrap_content"
             android:layout_marginBottom="15dp"
             android:layout_height="wrap_content"
-            android:onClick="onLogin"
             android:textSize="20sp"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-            android:text="Ingresar" />
+            android:text="Sign in with email" />
 
-        <TextView
-            android:id="@+id/twRecoverPass"
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/logInGoogle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Recuperar Contraseña" />
+            android:layout_height="wrap_content" />
+
 
     </LinearLayout>
 
