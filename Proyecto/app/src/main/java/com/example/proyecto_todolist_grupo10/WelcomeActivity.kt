@@ -15,11 +15,13 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.proyecto_todolist_grupo10.MainActivity.Companion.fusedLocationClient1
-import com.example.proyecto_todolist_grupo10.model.Item
-import com.example.proyecto_todolist_grupo10.model.Lists
-import com.example.proyecto_todolist_grupo10.model.Users
+import com.example.proyecto_todolist_grupo10.configuration.RestApiService
+import com.example.proyecto_todolist_grupo10.configuration.api_key
+import com.example.proyecto_todolist_grupo10.model.*
 import com.example.proyecto_todolist_grupo10.networking.ApiApi
 import com.example.proyecto_todolist_grupo10.networking.ApiService
+import com.example.proyecto_todolist_grupo10.networking.HerokuApi
+import com.example.proyecto_todolist_grupo10.networking.HerokuApiService
 import kotlinx.android.synthetic.main.activity_welcome.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -36,6 +38,7 @@ class WelcomeActivity : AppCompatActivity() {
         var longitude1 : Double = 0.0
         var loginuser: Users = Users("","","","","","","","","", ArrayList<Lists>())
         var temp_listas = ArrayList<Lists>()
+        var id_lists_share = ArrayList<String>()
 
     }
 
@@ -44,58 +47,85 @@ class WelcomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val temper : Users? = intent.getSerializableExtra("logUser") as? Users
-
         val tempList = intent.getSerializableExtra("newList") as? ArrayList<Lists>
 
 
-        if(temper !=  null){
-            loginuser = temper
-        }
-        else{
-            //sacar listas de la api
-            // GET LISTS --> lista de listas del usuario
+        //sacar listas de la api
+        var listas_usuario= ArrayList<Lists>()
+        // GET LISTS --> lista de listas del usuario
+        val request = HerokuApiService.buildService(HerokuApi::class.java)
 
+        val call = request.getLists(api_key)
+        call.enqueue(object : Callback<ArrayList<Lists>> {
+            override fun onResponse(call: Call<ArrayList<Lists>>, response: Response<ArrayList<Lists>>) {
+                if (response.isSuccessful) {
+                    if (response.body() != null) {
+                        val lists =  response.body()!!
+                        lists.forEach {
+                            println("$it  --> Agregada al usuario")
+                            listas_usuario.add(it)
+                        }
+                        loginuser!!.UsersLists = listas_usuario
+                        recycler_view.adapter = HistoricAdapter1(loginuser!!.UsersLists)
+                        recycler_view.layoutManager = LinearLayoutManager(applicationContext)
 
-
-
-
-
-
-            //este código nos servirá para rellenar la location de los items sacados de la apí
-            val item1 = Item("item1", 0, 0, "Bueno, esta es la nota generada automaticamente al crear la lista", LocalDate.now().plusDays(30),LocalDate.now(),0,latitude1,longitude1)
-            val item2 = Item("item2", 0, 0, "Bueno, esta es la nota generada automaticamente al crear la lista",LocalDate.now().plusDays(30), LocalDate.now(),0,latitude1,longitude1)
-            var items = ArrayList<Item>()
-            fusedLocationClient1.lastLocation
-                .addOnSuccessListener { location : Location? ->
-                    latitude1 = location!!.latitude
-                    longitude1 = location!!.longitude
-                    println(latitude1.toString() + longitude1.toString())
-                    item1.latitude = latitude1
-                    item1.longitude = longitude1
-                    item2.latitude = latitude1
-                    item2.longitude = longitude1
+                        (recycler_view.adapter as HistoricAdapter1).setDataset(loginuser!!.UsersLists)
+                        }
+                    }
                 }
-            items.add(item1)
-            items.add(item2)
-            //hasta acá
+            override fun onFailure(call: Call<ArrayList<Lists>>, t: Throwable) {
+                Toast.makeText(this@WelcomeActivity, "${t.message}", Toast.LENGTH_SHORT).show() }
+        })
 
-            //acá creamos una lista, genérica, esto tenemos que rellenarlo con la info de la api
-            val lista_usuario = Lists(items, "lista1", 0, itemsComplete = ArrayList<Item>())
-            var listas_usuario= ArrayList<Lists>()
-            listas_usuario.add(lista_usuario)
+        //obtención de listas de shared list
+        val call1 = request.getSharedLists()
+        call1.enqueue(object : Callback<ArrayList<aux_shared_lists>> {
+            override fun onResponse(call: Call<ArrayList<aux_shared_lists>>, response: Response<ArrayList<aux_shared_lists>>) {
+                if (response.isSuccessful) {
+                    if (response.body() != null) {
+                        val lists =  response.body()!!
+                        lists.forEach {
+                            if(!id_lists_share.contains(it.list_id)){
+                                id_lists_share.add(it.list_id)
+                            }
+                            //ahora con it debemos ver la forma de sacar inmediatamente la lista correspondiente al id con GET LISTS/ID
 
-            println(loginuser.toString())
-            loginuser!!.UsersLists = listas_usuario
-        }
+                        }
+                        println("Listas compartidas --> $id_lists_share ")
+                        id_lists_share.forEach {
+                            val call2 = request.getListbyId(it)
+                            call2.enqueue(object : Callback<Lists> {
+                                override fun onResponse(call: Call<Lists>, response: Response<Lists>) {
+                                    if (response.isSuccessful) {
+                                        if (response.body() != null) {
+                                            var lists2 =  response.body()!!
+                                            lists2.shared = true
+                                            println("Lista generada desde shared : $lists2 ")
+                                            loginuser!!.UsersLists.add(lists2)
+                                            recycler_view.adapter?.notifyDataSetChanged()
+                                        }
+                                    }
+                                }
+                                override fun onFailure(call: Call<Lists>, t: Throwable) {
+                                    Toast.makeText(this@WelcomeActivity, "${t.message}", Toast.LENGTH_SHORT).show() }
+                            })
 
-        if (savedInstanceState != null) {
-            loginuser = savedInstanceState.getSerializable("user_log") as Users
-        }
+                        }
 
-        if(tempList != null){
-            loginuser!!.UsersLists = tempList
-        }
+
+                        //loginuser!!.UsersLists = listas_usuario
+                        //recycler_view.adapter = HistoricAdapter1(loginuser!!.UsersLists)
+                        //recycler_view.layoutManager = LinearLayoutManager(applicationContext)
+
+                        //(recycler_view.adapter as HistoricAdapter1).setDataset(loginuser!!.UsersLists)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<ArrayList<aux_shared_lists>>, t: Throwable) {
+                Toast.makeText(this@WelcomeActivity, "${t.message}", Toast.LENGTH_SHORT).show() }
+        })
+
+
 
         setContentView(R.layout.activity_welcome)
         supportActionBar?.hide()
@@ -120,8 +150,6 @@ class WelcomeActivity : AppCompatActivity() {
 
         loginuser!!.UsersLists = newList
 
-
-
     }
 
     fun onProfile(view: View){
@@ -142,10 +170,13 @@ class WelcomeActivity : AppCompatActivity() {
         if ( resultCode == Activity.RESULT_OK) {
             data?.apply {
                 var list = getSerializableExtra(CreateList.LIST) as Lists
-                temp_listas.add(list!!)
-                recycler_view.adapter?.notifyDataSetChanged()
-                loginuser!!.UsersLists = temp_listas
+                //método post para ingresar lista a la api
+                val apiService = RestApiService()
 
+                apiService.addLists(list){
+                    loginuser!!.UsersLists.add(it!!)
+                    recycler_view.adapter?.notifyDataSetChanged()
+                }
             }
         }
 
@@ -163,7 +194,6 @@ class WelcomeActivity : AppCompatActivity() {
 
     fun onLogout(view: View){
         var intent = Intent(this,MainActivity::class.java)
-        intent.putExtra("usuario_conect",loginuser)
         startActivity(intent)
     }
 

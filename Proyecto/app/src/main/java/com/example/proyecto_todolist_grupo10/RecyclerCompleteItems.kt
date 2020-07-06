@@ -55,7 +55,7 @@ class HistoricAdapter3 (private val completeItems: ArrayList<Item>):
             view.twNameCompleteItem.paintFlags = view.twNameCompleteItem.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
             view.checkBoxItem2.isChecked = true
 
-            if(item.prioridad == 1){
+            if(item.starred == true){
                 view.imageViewCompleteItemPriority.visibility = View.VISIBLE
             }
 

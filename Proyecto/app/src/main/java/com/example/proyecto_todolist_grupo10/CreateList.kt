@@ -43,6 +43,7 @@ class CreateList : AppCompatActivity() {
 
 
         var items = ArrayList<Item>()
+        /*
 
         fusedLocationClient1.lastLocation
             .addOnSuccessListener { location : Location? ->
@@ -56,23 +57,20 @@ class CreateList : AppCompatActivity() {
                 items.add(item1)
                 items.add(item2)
                 items.add(item3)
-                items.add(item4)
+                items.add(item4)*/
+
                 if (inputname == ""){
                     Toast.makeText(this.applicationContext, "Ingrese nombre, es obligatorio para crear una lista", Toast.LENGTH_SHORT).show()
                 }
                 else{
-                    val list = Lists(items as ArrayList<Item>,inputname,position = 0,
-                        itemsComplete = ArrayList<Item>()
-                    )
+                    val list = Lists("1",inputname, "1","asda","asdasd", items,
+                        ArrayList<Item>(), false)
                     val data = Intent().apply {
                         putExtra(LIST,list)
                     }
                     setResult(Activity.RESULT_OK,data)
                     finish()
                 }
-
-            }
-
     }
 
     fun cancel(view: View){
