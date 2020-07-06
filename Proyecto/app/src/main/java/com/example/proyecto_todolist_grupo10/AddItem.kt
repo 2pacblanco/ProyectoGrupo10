@@ -1,33 +1,30 @@
 package com.example.proyecto_todolist_grupo10
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.location.Location
-import android.os.AsyncTask
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
+import androidx.appcompat.app.AppCompatActivity
 import com.example.proyecto_todolist_grupo10.MainActivity.Companion.fusedLocationClient1
 import com.example.proyecto_todolist_grupo10.model.Item
-import com.example.proyecto_todolist_grupo10.model.Lists
-import kotlinx.android.synthetic.main.activity_create_list.*
+import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.util.*
 
 class AddItem : AppCompatActivity() {
 
     companion object{
         const val  ITEM = "ITEM"
         var newItem : Item? = null
+        var resultDateString : String = ""
         fun newInstance1(context: Context) = Intent(context, AddItem::class.java)
     }
 
@@ -36,7 +33,17 @@ class AddItem : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_item)
         supportActionBar?.hide()
+        val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+        val currentDate = sdf.format(Date())
+        println(currentDate)
 
+        //add days
+        val c1 = Calendar.getInstance()
+        c1.add(Calendar.DAY_OF_YEAR, 30)
+        val sdf1 = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+        val resultDate = c1.time
+        resultDateString = sdf1.format(resultDate)
+        println(resultDateString)
     }
 
     @SuppressLint("MissingPermission")
@@ -54,17 +61,20 @@ class AddItem : AppCompatActivity() {
             Toast.makeText(this.applicationContext, "Ingrese nombre, es obligatorio para crear un item", Toast.LENGTH_SHORT).show()
         }
         else{
+
+
             if( checkPriority.isChecked && noteitem != ""){
-                newItem = Item(nameitem,0, 1,noteitem, LocalDate.now().plusDays(30) ,LocalDate.now(), 0,0.0,0.0)
+                newItem = Item("", nameitem,"1","por_cambiar", true,false, resultDateString,LocalDate.now().toString(),noteitem,LocalDate.now().toString(),0 , 0.0,0.0)
             }
             if(!checkPriority.isChecked && noteitem != ""){
-                newItem = Item(nameitem,0, 0,noteitem,LocalDate.now().plusDays(30) ,LocalDate.now(),0,0.0,0.0)
+                newItem = Item("", nameitem,"1","por_cambiar", false,false, resultDateString,LocalDate.now().toString(),noteitem,LocalDate.now().toString(),0 , 0.0,0.0)
             }
             if(checkPriority.isChecked && noteitem == ""){
-                newItem = Item(nameitem,0, 1,"", LocalDate.now().plusDays(30),LocalDate.now(),0,0.0,0.0)
+                newItem = Item("", nameitem,"1","por_cambiar", true,false, resultDateString,LocalDate.now().toString(),"",LocalDate.now().toString(),0 , 0.0,0.0)
             }
             if(!checkPriority.isChecked && noteitem == ""){
-                newItem = Item(nameitem,0, 0,"", LocalDate.now().plusDays(30),LocalDate.now(),0,0.0,0.0)
+                newItem = Item("", nameitem,"1","por_cambiar", false,false, resultDateString,LocalDate.now().toString(),"",LocalDate.now().toString(),0 , 0.0,0.0)
+
             }
 
             fusedLocationClient1.lastLocation
@@ -72,8 +82,8 @@ class AddItem : AppCompatActivity() {
                     latitude1 = location!!.latitude
                     longitude1 = location!!.longitude
                     println(latitude1.toString() + longitude1.toString())
-                    newItem!!.latitude = latitude1
-                    newItem!!.longitude = longitude1
+                    newItem!!.lat = latitude1
+                    newItem!!.long = longitude1
                     val data = Intent().apply {
                         putExtra(ITEM, newItem!!)
                     }
@@ -82,6 +92,7 @@ class AddItem : AppCompatActivity() {
                 }
 
         }
+
 
     }
 

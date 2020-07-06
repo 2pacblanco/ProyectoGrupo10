@@ -13,8 +13,14 @@ import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import com.example.proyecto_todolist_grupo10.model.Item
 import com.example.proyecto_todolist_grupo10.model.Lists
+import com.example.proyecto_todolist_grupo10.model.aux_item2
+import com.example.proyecto_todolist_grupo10.networking.HerokuApi
+import com.example.proyecto_todolist_grupo10.networking.HerokuApiService
 import kotlinx.android.synthetic.main.custom_dialog_name.*
 import kotlinx.android.synthetic.main.to_do_cells.view.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
 
 
@@ -64,8 +70,9 @@ class HistoricAdapter2 (private val toDoList: ArrayList<Item>):
 
         }
 
-        holder.itemView.btnChangeName.setOnClickListener{
-            val dialog = Dialog(it.context)
+
+        holder.itemView.btnChangeName.setOnClickListener{ it1 ->
+            val dialog = Dialog(it1.context)
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
             dialog.setCancelable(false)
             dialog.setContentView(R.layout.custom_dialog_name)
@@ -75,6 +82,35 @@ class HistoricAdapter2 (private val toDoList: ArrayList<Item>):
             confirmButton.setOnClickListener(View.OnClickListener {
                 val etNewName: String = dialog.etNewName.text.toString()
                 currentItem.name = etNewName
+                //ocupar el método put
+                var aux_item1 = aux_item2(
+                    currentItem.name,
+                    currentItem.position,
+                    currentItem.list_id,
+                    currentItem.starred.toString(),
+                    currentItem.due_date,
+                    currentItem.notes,
+                    currentItem.done.toString()
+                )
+                val request = HerokuApiService.buildService(HerokuApi::class.java)
+                val call = request.updateItem(aux_item1, currentItem.id)
+                call.enqueue(object : Callback<Item> {
+                    override fun onResponse(call: Call<Item>, response: Response<Item>) {
+                        if (response.isSuccessful) {
+                            if (response.body() != null) {
+                                val items = response.body()!!
+                                println("SIII SI SE CAMBIA EL NOMBNREEE")
+                                println(items)
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Item>, t: Throwable) {
+                        Toast.makeText(it1.context, "${t.message}", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                })
+
                 notifyDataSetChanged()
                 dialog.dismiss()
             })
@@ -85,11 +121,9 @@ class HistoricAdapter2 (private val toDoList: ArrayList<Item>):
             if (isChecked){
                 currentItem.check = 1
                 dataset = toDoList
-                notifyDataSetChanged()
             }else{
                 currentItem.check = 0
                 dataset = toDoList
-                notifyDataSetChanged()
             }
 
             var index = 0
@@ -110,8 +144,7 @@ class HistoricAdapter2 (private val toDoList: ArrayList<Item>):
         holder.itemView.setOnClickListener{
             var intent = Intent(it.context, ItemDetail::class.java)
             intent.putExtra("Item",currentItem)
-            intent.putExtra("Lists_usurer",ToDoActivity.tempList as Lists)
-            intent.putExtra("user_log", ToDoActivity.loguser)
+            intent.putExtra("list", ToDoActivity.list)
             it.context.startActivity(intent)
         }
 
@@ -139,12 +172,14 @@ class HistoricAdapter2 (private val toDoList: ArrayList<Item>):
             view.imageViewPrioridad.visibility = View.GONE
             view.twNameToDoActivity.text = item.name
 
+            item.check = 0
 
 
-            if(item.estado == 1){
+
+            if(item.done){
                 view.checkBoxItem.isChecked = true
             }
-            if(item.prioridad == 1){
+            if(item.starred == true){
                 view.imageViewPrioridad.visibility = View.VISIBLE
             }
 

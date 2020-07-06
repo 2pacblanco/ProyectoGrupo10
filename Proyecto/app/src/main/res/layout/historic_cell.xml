@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/lnCelTodo"
     android:layout_height="70dp"
     android:layout_width="match_parent"
@@ -43,6 +43,14 @@
         android:layout_marginLeft="45dp"
         android:layout_gravity="center_vertical"
         />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        app:srcCompat="?attr/actionModeShareDrawable" />
     <Button
         android:id="@+id/btDeleteList"
         android:layout_width="45dp"
@@ -50,6 +58,8 @@
         android:textSize="25dp"
         android:text="X"
         />
+
+
 
 
 </LinearLayout>

@@ -24,6 +24,9 @@ import com.example.proyecto_todolist_grupo10.model.Lists
 import com.example.proyecto_todolist_grupo10.model.Users
 import com.example.proyecto_todolist_grupo10.util.LocationUtil
 import androidx.lifecycle.Observer
+import com.example.proyecto_todolist_grupo10.model.aux_item2
+import com.example.proyecto_todolist_grupo10.networking.HerokuApi
+import com.example.proyecto_todolist_grupo10.networking.HerokuApiService
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -33,18 +36,26 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import kotlinx.android.synthetic.main.activity_item_detail.*
 import kotlinx.android.synthetic.main.custom_dialog_changenote.*
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
 
 class ItemDetail : AppCompatActivity() {
 
-    companion object{
+    companion object {
         @RequiresApi(Build.VERSION_CODES.O)
-        var ItemRecive : Item= Item("", 0, 0,"", LocalDate.now().plusDays(30),LocalDate.now(),0,0.0,0.0)
-        var loguser : Users? = null
-        var tempList1 : Lists? = null
+        var ItemRecive: Item = Item("", "", "", "", false, false, "", "", "", "", 0, 0.0, 0.0)
+        var loguser: Users? = null
+        var tempList1: Lists? = null
         var cal: Calendar = Calendar.getInstance()
+        var cal2: Calendar = Calendar.getInstance()
+
+
+        lateinit var list : Lists
 
         lateinit var mMap: GoogleMap
         lateinit var locationData: LocationUtil
@@ -64,8 +75,10 @@ class ItemDetail : AppCompatActivity() {
 
 
         ItemRecive = intent.getSerializableExtra("Item") as Item
-        loguser = intent.getSerializableExtra("user_log") as Users
-        tempList1 = intent.getSerializableExtra("Lists_usurer") as Lists
+        list = intent.getSerializableExtra("list") as Lists
+
+        println("Item recibido en ITEM DETAIL  $ItemRecive")
+
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
@@ -76,18 +89,17 @@ class ItemDetail : AppCompatActivity() {
 
         //seteo de variables
         twNameItem.text = ItemRecive.name
-        if(ItemRecive.prioridad==1){
+        if(ItemRecive.starred){
             imageViewPrioridadItem.visibility = View.VISIBLE
         }
-        if(ItemRecive.prioridad==0){
+        if(!ItemRecive.starred){
             imageViewPrioridadItem.visibility = View.GONE
         }
-        twFechaItem.setText(ItemRecive.plazo.toString())
-        twNotasItem.text = ItemRecive.notas
-        fechacreacion.text = "Creado el "+ItemRecive.create_at.toString()
+        twFechaItem.setText(ItemRecive.due_date.toString())
+        twNotasItem.text = ItemRecive.notes
+        fechacreacion.text = "Creado el " + ItemRecive.create_at
 
         //edicion de fecha lo veremos en un rato
-
         val dateSetListener = object : DatePickerDialog.OnDateSetListener {
             override fun onDateSet(view: DatePicker, year: Int, monthOfYear: Int,
                                    dayOfMonth: Int) {
@@ -102,33 +114,56 @@ class ItemDetail : AppCompatActivity() {
             val picker = DatePickerDialog(this,
                 dateSetListener,
                 // set DatePickerDialog to point to today's date when it loads up
-                cal.get(Calendar.YEAR),
-                cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH))
+                cal2.get(Calendar.YEAR),
+                cal2.get(Calendar.MONTH),
+                cal2.get(Calendar.DAY_OF_MONTH))
             picker.show()
-
-
         }
-
-
-
 
 
         //edicion de prioridad
         lyPrioridad.setOnClickListener{
             var counter = 0
-            if(ItemRecive.prioridad == 0 && counter == 0){
+            if(!ItemRecive.starred  && counter == 0){
                 imageViewPrioridadItem.visibility = View.VISIBLE
-               ItemRecive.prioridad = 1
+               ItemRecive.starred = true
                 counter = 1
-                println("prioridad del item cambio correctamente "+ItemRecive.name+" cambio a prioridad: "+ ItemRecive.prioridad)
+                println("prioridad del item cambio correctamente "+ItemRecive.name+" cambio a prioridad: "+ ItemRecive.starred.toString())
             }
-            if(ItemRecive.prioridad == 1 && counter == 0){
+            if(ItemRecive.starred && counter == 0){
                 imageViewPrioridadItem.visibility = View.GONE
-                ItemRecive.prioridad = 0
-                println("prioridad del item cambio correctamente "+ItemRecive.name+" cambio a prioridad: "+ ItemRecive.prioridad)
+                ItemRecive.starred = false
+                println("prioridad del item cambio correctamente "+ItemRecive.name+" cambio a prioridad: "+ ItemRecive.starred.toString())
                 counter = 1
             }
+            var aux_item1 = aux_item2(
+                ItemRecive.name,
+                ItemRecive.position,
+                ItemRecive.list_id,
+                ItemRecive.starred.toString(),
+                ItemRecive.due_date,
+                ItemRecive.notes,
+                ItemRecive.done.toString()
+            )
+            val request = HerokuApiService.buildService(HerokuApi::class.java)
+            val call = request.updateItem(aux_item1, ItemRecive.id)
+            call.enqueue(object : Callback<Item> {
+                override fun onResponse(call: Call<Item>, response: Response<Item>) {
+                    if (response.isSuccessful) {
+                        if (response.body() != null) {
+                            val items = response.body()!!
+                            println("SIII SI SE COMPLETYAAA")
+                            println(items)
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<Item>, t: Throwable) {
+                    Toast.makeText(this@ItemDetail, "${t.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            })
+            println("prioridad cambiada correctamente")
         }
 
         ContainerNotas.setOnClickListener{
@@ -141,7 +176,35 @@ class ItemDetail : AppCompatActivity() {
             cancelButton.setOnClickListener(View.OnClickListener { dialog.dismiss() })
             confirmButton.setOnClickListener(View.OnClickListener {
                 val NewNote: String = dialog.etNewNote.text.toString()
-                ItemRecive.notas = NewNote
+                ItemRecive.notes = NewNote
+                var aux_item1 = aux_item2(
+                    ItemRecive.name,
+                    ItemRecive.position,
+                    ItemRecive.list_id,
+                    ItemRecive.starred.toString(),
+                    ItemRecive.due_date,
+                    ItemRecive.notes,
+                    ItemRecive.done.toString()
+                )
+                val request = HerokuApiService.buildService(HerokuApi::class.java)
+                val call = request.updateItem(aux_item1, ItemRecive.id)
+                call.enqueue(object : Callback<Item> {
+                    override fun onResponse(call: Call<Item>, response: Response<Item>) {
+                        if (response.isSuccessful) {
+                            if (response.body() != null) {
+                                val items = response.body()!!
+                                println("SIII SI SE COMPLETYAAA")
+                                println(items)
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Item>, t: Throwable) {
+                        Toast.makeText(this@ItemDetail, "${t.message}", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                })
+                println("notas CAMBIADAS CORRECTAMENTE")
                 dialog.dismiss()
                 finish()
                 startActivity(intent)
@@ -156,20 +219,27 @@ class ItemDetail : AppCompatActivity() {
             builder.setMessage("Desea Eliminar?")
 
             builder.setPositiveButton(android.R.string.yes){ _, _ ->
-                var index1 = 0
-                var tempitem : Item = Item("",0, 0, "",LocalDate.now().plusDays(30),LocalDate.now(),0,0.0,0.0)
-                tempList1!!.items.forEach{ it1 ->
-                    if(it1.name == ItemRecive.name) {
-                        tempitem = it1
-                        return@forEach
+                //ItemRecive eliminado  de la api y vuelta a toDoActivity
+                val request = HerokuApiService.buildService(HerokuApi::class.java)
+
+                val call = request.deleteItem(ItemRecive.id)
+                call.enqueue(object : Callback<ResponseBody> {
+                    override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                        if (response.isSuccessful) {
+                            if (response.body() != null) {
+                                val lists =  response.body()!!
+                                println(lists.toString())
+                            }
+                        }
                     }
-                    index1 += 1
-                }
-                tempList1!!.items.remove(tempitem)
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                        Toast.makeText(it.context, "${t.message}", Toast.LENGTH_SHORT).show()
+                    }
+                })
 
                 var intent = Intent(this,ToDoActivity::class.java)
-                intent.putExtra("user_log", loguser)
-                intent.putExtra("List", tempList1)
+                intent.putExtra("user_log", ToDoActivity.loguser)
+                intent.putExtra("List", list)
                 startActivity(intent)
             }
             builder.setNegativeButton(android.R.string.no) { dialog, _ ->
@@ -180,53 +250,59 @@ class ItemDetail : AppCompatActivity() {
         }
 
         btnCompleteItem.setOnClickListener{
-            ItemRecive.estado = 1
-            Toast.makeText(it.context, "Item completado existosamente", Toast.LENGTH_SHORT).show()
-            var index1 = 0
-            tempList1!!.items.forEach{ it1 ->
-                if(it1.name == ItemRecive.name) {
-                    tempList1!!.items[index1] = ItemRecive
-                    return@forEach
-                }
-                index1 += 1
-            }
+            ItemRecive.done = true
 
+            var aux_item1 = aux_item2(
+                ItemRecive.name,
+                ItemRecive.position,
+                ItemRecive.list_id,
+                ItemRecive.starred.toString(),
+                ItemRecive.due_date,
+                ItemRecive.notes,
+                ItemRecive.done.toString()
+            )
+            val request = HerokuApiService.buildService(HerokuApi::class.java)
+            val call = request.updateItem(aux_item1, ItemRecive.id)
+            call.enqueue(object : Callback<Item> {
+                override fun onResponse(call: Call<Item>, response: Response<Item>) {
+                    if (response.isSuccessful) {
+                        if (response.body() != null) {
+                            val items = response.body()!!
+                            println("SIII SI SE COMPLETYAAA")
+                            println(items)
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<Item>, t: Throwable) {
+                    Toast.makeText(this@ItemDetail, "${t.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            })
+
+            Toast.makeText(it.context, "Item completado existosamente", Toast.LENGTH_SHORT).show()
             var intent = Intent(this,ToDoActivity::class.java)
-            intent.putExtra("user_log", loguser)
-            intent.putExtra("List", tempList1)
+            intent.putExtra("user_log", ToDoActivity.loguser)
+            intent.putExtra("List", list)
             startActivity(intent)
         }
 
-
-
-
-        println(loguser!!.name)
-        println(tempList1!!.items[0].name)
 
         btLogout1.setOnClickListener{
-            var index1 = 0
-            tempList1!!.items.forEach{
-                if(it.name == ItemRecive.name) {
-                   tempList1!!.items[index1] = ItemRecive
-                    return@forEach
-                }
-                index1 += 1
-            }
-
             var intent = Intent(this,ToDoActivity::class.java)
-            intent.putExtra("user_log", loguser)
-            intent.putExtra("List", tempList1)
+            intent.putExtra("user_log", ToDoActivity.loguser)
+            intent.putExtra("List", list)
             startActivity(intent)
         }
+
+
 
     }
 
     private fun invokeLocationAction(item: Item) {
-
-
             when {
                 isPermissionsGranted() -> locationData.observe(this, Observer {
-                    println("${item.latitude} , ${item.longitude}")
+                    println("${item.lat} , ${item.long}")
 
                     MainActivity.fusedLocationClient1 = LocationServices.getFusedLocationProviderClient(this)
 
@@ -234,10 +310,10 @@ class ItemDetail : AppCompatActivity() {
                     val polylineOptions = PolylineOptions().clickable(false).color(R.color.colorAccent).geodesic(true)
                         .width(10f)
 
-                    mMap.addMarker(MarkerOptions().position(LatLng(item.latitude, item.longitude)).title(item.name))
-                    polylineOptions.add(LatLng(item.latitude,item.longitude))
+                    mMap.addMarker(MarkerOptions().position(LatLng(item.lat, item.long)).title(item.name))
+                    polylineOptions.add(LatLng(item.lat,item.long))
                     mMap.addPolyline(polylineOptions)
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(item.latitude,item.longitude), 12.0f))
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(item.lat,item.long), 12.0f))
 
                 })
 
@@ -290,18 +366,50 @@ class ItemDetail : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun updateDateInView() {
-        val myFormat = "yyyy-MM-dd" // mention the format you need
+        val myFormat = "yyyy-MM-dd HH:mm:ss" // mention the format you need
         val sdf = SimpleDateFormat(myFormat, Locale.US)
         twFechaItem!!.setText(sdf.format(cal.time))
 
-        if (LocalDate.now() < LocalDate.parse(twFechaItem.text.toString())) {
-            ItemRecive.plazo = LocalDate.parse(twFechaItem.text.toString())
+        if (Date() < cal.time) {
+            ItemRecive.due_date = sdf.format(cal.time)
+            //update ItemRecive pal put de los items
+            var aux_item1 = aux_item2(
+                ItemRecive.name,
+                ItemRecive.position,
+                ItemRecive.list_id,
+                ItemRecive.starred.toString(),
+                ItemRecive.due_date,
+                ItemRecive.notes,
+                ItemRecive.done.toString()
+            )
+            val request = HerokuApiService.buildService(HerokuApi::class.java)
+            val call = request.updateItem(aux_item1, ItemRecive.id)
+            call.enqueue(object : Callback<Item> {
+                override fun onResponse(call: Call<Item>, response: Response<Item>) {
+                    if (response.isSuccessful) {
+                        if (response.body() != null) {
+                            val items = response.body()!!
+                            println("SIII SI SE COMPLETYAAA")
+                            println(items)
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<Item>, t: Throwable) {
+                    Toast.makeText(this@ItemDetail, "${t.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            })
             Toast.makeText(this, "Fecha de plazo cambiada correctamente", Toast.LENGTH_SHORT).show()
+
         }
         else{
-            twFechaItem!!.setText(ItemRecive.plazo.toString())
+            twFechaItem!!.setText(ItemRecive.due_date)
             Toast.makeText(this, "no se pudo crear el nuevo plazo ya que es anterior a la fecha de hoy", Toast.LENGTH_SHORT).show()
         }
 
     }
+
+
 }
+

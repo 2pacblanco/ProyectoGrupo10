@@ -12,8 +12,15 @@ import android.widget.NumberPicker
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.proyecto_todolist_grupo10.configuration.api_key
 import com.example.proyecto_todolist_grupo10.model.Lists
+import com.example.proyecto_todolist_grupo10.networking.HerokuApi
+import com.example.proyecto_todolist_grupo10.networking.HerokuApiService
 import kotlinx.android.synthetic.main.historic_cell.view.*
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
 
 
@@ -73,6 +80,24 @@ class HistoricAdapter1 (private val historicList: ArrayList<Lists>):
                 historicList.remove(currentItem)
                 dataset = historicList
                 notifyDataSetChanged()
+
+                val request = HerokuApiService.buildService(HerokuApi::class.java)
+
+                val call = request.deleteGist(currentItem.id)
+                call.enqueue(object : Callback<ResponseBody> {
+                    override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                        if (response.isSuccessful) {
+                            if (response.body() != null) {
+                                val lists =  response.body()!!
+                                println(lists.toString())
+
+                            }
+                        }
+                    }
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                        Toast.makeText(it.context, "${t.message}", Toast.LENGTH_SHORT).show()
+                    }
+                })
             }
             builder.setNegativeButton(android.R.string.no) { dialog, _ ->
                 dialog.dismiss()
@@ -103,6 +128,11 @@ class HistoricAdapter1 (private val historicList: ArrayList<Lists>):
         fun bindHistoric(item: Lists){
             this.item = item
             view.twNameofList.text = item.name
+            view.imageView1.visibility = View.GONE
+
+            if(item.shared){
+                view.imageView1.visibility = View.VISIBLE
+            }
 
             view.setOnClickListener{
                 var intent = Intent(view.context, ToDoActivity::class.java)

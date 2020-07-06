@@ -35,11 +35,6 @@ class MainActivity : AppCompatActivity() {
         fusedLocationClient1 = LocationServices.getFusedLocationProviderClient(this)
         ItemDetail.locationData = LocationUtil(this)
 
-        val user: Users? = intent.getSerializableExtra("usuario_conect") as? Users
-
-        if (user != null){
-            logUser = user
-        }
 
         //actualizado a la api de entrega 3
         val request = HerokuApiService.buildService(HerokuApi::class.java)
