@@ -9,11 +9,18 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.proyecto_todolist_grupo10.model.Item
 import com.example.proyecto_todolist_grupo10.model.Users
+import com.example.proyecto_todolist_grupo10.model.aux_user
+import com.example.proyecto_todolist_grupo10.networking.HerokuApi
+import com.example.proyecto_todolist_grupo10.networking.HerokuApiService
 import kotlinx.android.synthetic.main.custom_dialog_change_name_user.*
 import kotlinx.android.synthetic.main.custom_dialog_change_phone_user.*
 import kotlinx.android.synthetic.main.custom_dialog_name.*
 import kotlinx.android.synthetic.main.my_profile_activity.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MyProfileActivity : AppCompatActivity() {
 
@@ -66,8 +73,8 @@ class MyProfileActivity : AppCompatActivity() {
                 numeric = checkNumber.matches("-?\\d+(\\.\\d+)?".toRegex())
                 if (numeric){
                     if (checkNumber.length == 8) {
-                        loginuser!!.phone = dialog.etNewPhone.text.toString()
-                        twPhone.text = "+56 9 "+ dialog.etNewPhone.text.toString()
+                        twPhone.text = "+569 "+ dialog.etNewPhone.text.toString()
+                        loginuser!!.phone = twPhone.text as String
                         dialog.dismiss()
                     }
                     else{
@@ -75,22 +82,44 @@ class MyProfileActivity : AppCompatActivity() {
                         dialog.dismiss()
                     }
                 }
-
                 else{
                     Toast.makeText(this, "No es un numero valido", Toast.LENGTH_SHORT).show()
                     dialog.dismiss()
                 }
-
-
             }
             dialog.show()
         }
+
+        //falta agregar el botón para poder cambiar el apellido y el correo
+        //tbm quiero agregar la foto que se pueda visualizar
 
 
 
     }
 
     fun onBack(view: View){
+        println(loginuser)
+        //guardar el loginuser en la api con update_self
+        var auxUser = aux_user(loginuser!!.email, loginuser!!.name, loginuser!!.last_name, loginuser!!.phone, loginuser!!.profile_photo)
+        val request = HerokuApiService.buildService(HerokuApi::class.java)
+        val call = request.updateUser(auxUser)
+        call.enqueue(object : Callback<Users> {
+            override fun onResponse(call: Call<Users>, response: Response<Users>) {
+                if (response.isSuccessful) {
+                    if (response.body() != null) {
+                        val items = response.body()!!
+                        println("Usuario updateado milagrosamente")
+                        println(items)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<Users>, t: Throwable) {
+                Toast.makeText(this@MyProfileActivity, "${t.message}", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        })
+        WelcomeActivity.loginuser = loginuser!!
         var intent = Intent(this,UserInfoActivity::class.java)
         intent.putExtra("logUser", loginuser)
         startActivity(intent)

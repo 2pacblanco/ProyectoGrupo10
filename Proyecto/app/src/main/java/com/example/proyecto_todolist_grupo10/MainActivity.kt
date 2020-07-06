@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         fusedLocationClient1 = LocationServices.getFusedLocationProviderClient(this)
         ItemDetail.locationData = LocationUtil(this)
 
-<<<<<<< HEAD
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
@@ -59,8 +59,7 @@ class MainActivity : AppCompatActivity() {
         if (user != null){
             logUser = user
         }
-=======
->>>>>>> 08a9a7808aceedfc1fbfa813537a17054b1abb4e
+
 
         //actualizado a la api de entrega 3
         val request = HerokuApiService.buildService(HerokuApi::class.java)
