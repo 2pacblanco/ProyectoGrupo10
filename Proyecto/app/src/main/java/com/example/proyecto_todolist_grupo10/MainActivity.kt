@@ -20,6 +20,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_main.*
+import okhttp3.internal.notifyAll
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -60,15 +61,14 @@ class MainActivity : AppCompatActivity() {
             logUser = user
         }
 
-<<<<<<< HEAD
+
         if (mAuth.currentUser == null){
             Toast.makeText(this, "Se ha cerrado sesion de la ultima vez", Toast.LENGTH_SHORT).show()
         }   else{
             Toast.makeText(this, "Usuario ya loggeado, se cerrara sesion", Toast.LENGTH_SHORT).show()
             mAuth.signOut()
         }
-=======
->>>>>>> b7c14acb132b28643bf0139396185a991873b1f2
+
 
         //actualizado a la api de entrega 3
         val request = HerokuApiService.buildService(HerokuApi::class.java)
@@ -122,7 +122,7 @@ class MainActivity : AppCompatActivity() {
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)!!
-                Toast.makeText(this, "firebaseAuthWithGoogle:", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "firebaseAuthWithGoogle: ${account.displayName}", Toast.LENGTH_SHORT).show()
                 if (account != null) {
                     firebaseAuthWithGoogle(account.idToken!!)
                 }else{
