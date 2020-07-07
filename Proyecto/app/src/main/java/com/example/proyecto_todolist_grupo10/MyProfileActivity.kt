@@ -6,21 +6,23 @@ import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.proyecto_todolist_grupo10.model.Item
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.proyecto_todolist_grupo10.model.Users
 import com.example.proyecto_todolist_grupo10.model.aux_user
 import com.example.proyecto_todolist_grupo10.networking.HerokuApi
 import com.example.proyecto_todolist_grupo10.networking.HerokuApiService
 import kotlinx.android.synthetic.main.custom_dialog_change_name_user.*
 import kotlinx.android.synthetic.main.custom_dialog_change_phone_user.*
-import kotlinx.android.synthetic.main.custom_dialog_name.*
 import kotlinx.android.synthetic.main.my_profile_activity.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class MyProfileActivity : AppCompatActivity() {
 
@@ -40,6 +42,8 @@ class MyProfileActivity : AppCompatActivity() {
         val twName = findViewById<TextView>(R.id.twnameuser)
         val twEmail = findViewById<TextView>(R.id.twemailuser)
         val twPhone = findViewById<TextView>(R.id.twphoneuser)
+        val imageView = findViewById<ImageView>(R.id.image1)
+
         twName.text = loginuser!!.name +" "+ loginuser!!.last_name
         twEmail.text = loginuser!!.email
         twPhone.text = loginuser!!.phone
@@ -89,10 +93,11 @@ class MyProfileActivity : AppCompatActivity() {
             }
             dialog.show()
         }
-
-        //falta agregar el botón para poder cambiar el apellido y el correo
-        //tbm quiero agregar la foto que se pueda visualizar
-
+        Glide.with(this)
+            .load(loginuser!!.profile_photo)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .skipMemoryCache(true)
+            .into(imageView);
 
 
     }
