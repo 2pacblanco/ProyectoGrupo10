@@ -13,6 +13,10 @@ interface HerokuApi {
     fun getUser(@Header("token") token: String?): Call<Users>
     //falta el update que va en la view de edición de profile
 
+    @Headers("token: $api_key")
+    @PUT("/users/update_self")
+    fun updateUser(@Body auxUser : aux_user): Call<Users>
+
     @GET("/lists")
     fun getLists(@Header("token")token: String?): Call<ArrayList<Lists>>
 

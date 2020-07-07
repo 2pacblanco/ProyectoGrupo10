@@ -60,12 +60,15 @@ class MainActivity : AppCompatActivity() {
             logUser = user
         }
 
+<<<<<<< HEAD
         if (mAuth.currentUser == null){
             Toast.makeText(this, "Se ha cerrado sesion de la ultima vez", Toast.LENGTH_SHORT).show()
         }   else{
             Toast.makeText(this, "Usuario ya loggeado, se cerrara sesion", Toast.LENGTH_SHORT).show()
             mAuth.signOut()
         }
+=======
+>>>>>>> b7c14acb132b28643bf0139396185a991873b1f2
 
         //actualizado a la api de entrega 3
         val request = HerokuApiService.buildService(HerokuApi::class.java)
