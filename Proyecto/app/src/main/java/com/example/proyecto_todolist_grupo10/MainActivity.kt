@@ -60,15 +60,12 @@ class MainActivity : AppCompatActivity() {
             logUser = user
         }
 
-<<<<<<< HEAD
         if (mAuth.currentUser == null){
             Toast.makeText(this, "Se ha cerrado sesion de la ultima vez", Toast.LENGTH_SHORT).show()
         }   else{
             Toast.makeText(this, "Usuario ya loggeado, se cerrara sesion", Toast.LENGTH_SHORT).show()
             mAuth.signOut()
         }
-=======
->>>>>>> b7c14acb132b28643bf0139396185a991873b1f2
 
         //actualizado a la api de entrega 3
         val request = HerokuApiService.buildService(HerokuApi::class.java)
@@ -125,6 +122,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "firebaseAuthWithGoogle:", Toast.LENGTH_SHORT).show()
                 if (account != null) {
                     firebaseAuthWithGoogle(account.idToken!!)
+                    Toast.makeText(this, "Bienvenido " + account.displayName, Toast.LENGTH_SHORT).show()
                 }else{
                     Toast.makeText(this, "cuenta vacia", Toast.LENGTH_SHORT).show()
                 }
@@ -142,7 +140,7 @@ class MainActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    Toast.makeText(this, "signInWithCredential:success", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this, "signInWithCredential:success", Toast.LENGTH_SHORT).show()
                     var intent = Intent(this,WelcomeActivity::class.java)
                     intent.putExtra("logUser",logUser)
                     startActivity(intent)
