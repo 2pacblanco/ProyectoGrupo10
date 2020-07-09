@@ -97,7 +97,7 @@ class ToDoActivity : AppCompatActivity() {
                         val items = response.body()!!
                         items.forEach {
                             println("$it  --> Agregada al usuario")
-                            println(it.due_date.subSequence(0,10).toString() +"contra"+ LocalDate.now().toString())
+                            //println(it.due_date.subSequence(0,10).toString() +"contra"+ LocalDate.now().toString())
                             if (!it.done && LocalDate.parse(it.due_date.subSequence(0,10).toString()) > LocalDate.now()){
                                 items_usuario.add(it)
                                 invokeLocationAction(it)
