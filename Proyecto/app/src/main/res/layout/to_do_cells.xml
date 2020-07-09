@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@android:drawable/arrow_up_float"
+            android:background="@drawable/ic_baseline_arrow_drop_up_24"
             style="?attr/materialButtonOutlinedStyle"
             android:gravity="center"
             android:textSize="26sp" />
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@android:drawable/arrow_down_float"
+            android:background="@drawable/ic_baseline_arrow_drop_down_24"
             android:gravity="center"
             style="?attr/materialButtonOutlinedStyle"
             android:textSize="25sp" />
@@ -59,7 +59,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
-            app:srcCompat="@android:drawable/btn_star_big_on" />
+            app:srcCompat="@drawable/ic_baseline_star_24" />
     </LinearLayout>
 
 
@@ -76,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@android:drawable/ic_menu_edit" />
+            android:background="@drawable/ic_baseline_create_24" />
 
 
     </LinearLayout>

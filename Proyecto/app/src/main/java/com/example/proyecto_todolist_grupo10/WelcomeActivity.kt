@@ -176,6 +176,7 @@ class WelcomeActivity : AppCompatActivity() {
             AuthUI.getInstance().signOut(this@WelcomeActivity)
                 .addOnCompleteListener{
                     btLogout.isEnabled = false
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     var intent = Intent(this,MainActivity::class.java)
                     startActivity(intent)
                 }

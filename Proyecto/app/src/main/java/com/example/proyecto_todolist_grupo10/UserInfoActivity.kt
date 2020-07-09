@@ -13,6 +13,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.proyecto_todolist_grupo10.model.Item
 import com.example.proyecto_todolist_grupo10.model.Lists
 import com.example.proyecto_todolist_grupo10.model.Users
+import com.firebase.ui.auth.AuthUI
+import kotlinx.android.synthetic.main.activity_welcome.*
+import kotlinx.android.synthetic.main.user_info_activity.*
+import kotlinx.android.synthetic.main.user_info_activity.btLogout
 
 class UserInfoActivity : AppCompatActivity(){
 
@@ -40,6 +44,16 @@ class UserInfoActivity : AppCompatActivity(){
         twName.text = loginuser!!.name +" "+ loginuser!!.last_name
         twEmail.text = loginuser!!.email
 
+        btSessionClose.setOnClickListener{
+            //firebase logout
+            AuthUI.getInstance().signOut(this@UserInfoActivity)
+                .addOnCompleteListener{
+                    btLogout.isEnabled = false
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    var intent = Intent(this,MainActivity::class.java)
+                    startActivity(intent)
+                }
+        }
     }
 
     fun onBack(view: View){

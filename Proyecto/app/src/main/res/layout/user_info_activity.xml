@@ -16,6 +16,7 @@ android:orientation="vertical">
         android:id="@+id/btLogout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_baseline_keyboard_arrow_left_24"
         android:text="Atras"
         android:onClick="onBack"/>
     <LinearLayout
@@ -76,7 +77,7 @@ android:orientation="vertical">
         android:onClick="onProfile"/>
 
     <Button
-        android:id="@+id/closeSesion"
+        android:id="@+id/btSessionClose"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="start"

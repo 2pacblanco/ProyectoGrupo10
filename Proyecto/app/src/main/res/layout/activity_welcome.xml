@@ -19,6 +19,8 @@
             android:layout_height="wrap_content"
             android:text="Log Out"
             android:textSize="20sp"
+            android:textColor="@color/colorAccent"
+            android:drawableLeft="@drawable/ic_baseline_exit_to_app_white_24"
 
             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
             android:onClick="onLogout"/>

@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@android:drawable/arrow_up_float"
+            android:background="@drawable/ic_baseline_arrow_drop_up_24"
             android:gravity="center"
             android:textSize="26sp" />
 
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@android:drawable/arrow_down_float"
+            android:background="@drawable/ic_baseline_arrow_drop_down_24"
             android:gravity="center"
             android:textSize="25sp" />
 
@@ -52,11 +52,12 @@
         android:layout_weight="1"
         app:srcCompat="?attr/actionModeShareDrawable" />
     <Button
+        android:layout_gravity="center"
         android:id="@+id/btDeleteList"
-        android:layout_width="45dp"
-        android:layout_height="70dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:textSize="25dp"
-        android:text="X"
+        android:background="@drawable/ic_baseline_clear_24"
         />
 
 
