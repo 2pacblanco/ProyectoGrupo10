@@ -49,26 +49,7 @@ class WelcomeActivity : AppCompatActivity() {
 
         val tempList = intent.getSerializableExtra("newList") as? ArrayList<Lists>
 
-        val request2 = HerokuApiService.buildService(HerokuApi::class.java)
 
-        val call2 = request2.getUser(api_key)
-        call2.enqueue(object : Callback<Users> {
-            override fun onResponse(call: Call<Users>, response: Response<Users>) {
-                if (response.isSuccessful) {
-                    if (response.body() != null) {
-                        val users =  response.body()!!
-                        loginuser.email = users.email
-                        loginuser.name = users.name
-                        loginuser.phone = users.phone
-                        loginuser.last_name = users.last_name
-                        loginuser.profile_photo = users.profile_photo
-                    }
-                }
-            }
-            override fun onFailure(call: Call<Users>, t: Throwable) {
-                Toast.makeText(this@WelcomeActivity, "${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
 
 
         //sacar listas de la api

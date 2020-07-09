@@ -38,6 +38,27 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
 
+        val request2 = HerokuApiService.buildService(HerokuApi::class.java)
+
+        val call2 = request2.getUser(api_key)
+        call2.enqueue(object : Callback<Users> {
+            override fun onResponse(call: Call<Users>, response: Response<Users>) {
+                if (response.isSuccessful) {
+                    if (response.body() != null) {
+                        val users =  response.body()!!
+                        WelcomeActivity.loginuser.email = users.email
+                        WelcomeActivity.loginuser.name = users.name
+                        WelcomeActivity.loginuser.phone = users.phone
+                        WelcomeActivity.loginuser.last_name = users.last_name
+                        WelcomeActivity.loginuser.profile_photo = users.profile_photo
+                    }
+                }
+            }
+            override fun onFailure(call: Call<Users>, t: Throwable) {
+                Toast.makeText(this@MainActivity, "${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+
 
 
 
