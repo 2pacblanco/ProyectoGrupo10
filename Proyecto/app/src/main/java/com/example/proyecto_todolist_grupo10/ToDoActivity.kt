@@ -97,7 +97,7 @@ class ToDoActivity : AppCompatActivity() {
                         val items = response.body()!!
                         items.forEach {
                             println("$it  --> Agregada al usuario")
-                            if (it.due_date != null){
+                            if(it.due_date != null){
                                 if (!it.done && LocalDate.parse(it.due_date.subSequence(0,10).toString()) > LocalDate.now()){
                                     items_usuario.add(it)
                                     invokeLocationAction(it)
@@ -108,7 +108,6 @@ class ToDoActivity : AppCompatActivity() {
                                 recycler_view.adapter?.notifyDataSetChanged()
                                 recycler_view2.adapter?.notifyDataSetChanged()
                             }
-
                         }
                     }
                 }
