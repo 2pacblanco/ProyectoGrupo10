@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() {
 
 
         providers = Arrays.asList<AuthUI.IdpConfig>(
-            AuthUI.IdpConfig.EmailBuilder().build(),
             AuthUI.IdpConfig.GoogleBuilder().build()
         )
 
@@ -62,7 +61,7 @@ class MainActivity : AppCompatActivity() {
                 var intent = Intent(this,WelcomeActivity::class.java)
                 startActivity(intent)
             }else{
-                Toast.makeText(this,""+response!!.error!!.message,Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this,""+response!!.error!!.message,Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -71,6 +70,8 @@ class MainActivity : AppCompatActivity() {
     private fun showSignInOptions(){
         startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
             .setAvailableProviders(providers)
+            .setAlwaysShowSignInMethodScreen(true)
+            .setIsSmartLockEnabled(false)
             .setLogo(R.drawable.to_do_logo)
             .setTheme(R.style.LoginTheme)
             .build(), MY_REQUEST_CODE)
