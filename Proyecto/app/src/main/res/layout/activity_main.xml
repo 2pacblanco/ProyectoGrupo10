@@ -5,76 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    tools:ignore="DuplicateIds">
-
-    <LinearLayout
-        android:layout_width="271dp"
-        android:layout_height="369dp"
-        android:background="@layout/border1"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/twRegister"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.923">
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/twLogin"
-            android:layout_width="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Login"
-            android:textSize="30sp" />
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etMail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:hint="Email"
-            android:ems="10"
-            android:inputType="textEmailAddress" />
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:hint="Password"
-            android:ems="10"
-            android:inputType="textPassword" />
-
-        <Button
-            android:id="@+id/btLogin"
-            android:layout_width="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-            android:text="Sign in with email" />
-
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/logInGoogle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+    tools:ignore="DuplicateIds"
+    android:background="@drawable/login_theme">
 
 
-    </LinearLayout>
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/twRegister"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Registrarse"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.733" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

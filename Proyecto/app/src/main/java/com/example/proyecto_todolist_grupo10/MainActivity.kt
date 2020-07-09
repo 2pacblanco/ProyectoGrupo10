@@ -1,5 +1,6 @@
 package com.example.proyecto_todolist_grupo10
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -10,6 +11,8 @@ import com.example.proyecto_todolist_grupo10.model.Users
 import com.example.proyecto_todolist_grupo10.networking.HerokuApi
 import com.example.proyecto_todolist_grupo10.networking.HerokuApiService
 import com.example.proyecto_todolist_grupo10.util.LocationUtil
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.IdpResponse
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignIn.getSignedInAccountFromIntent
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -23,19 +26,12 @@ import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val mAuth : FirebaseAuth by lazy {FirebaseAuth.getInstance()}
-    private val RC_GOOGLE_SIGN_IN = 99
+    lateinit var providers: List<AuthUI.IdpConfig>
 
-    private lateinit var mGoogleSignInClient: GoogleSignInClient
-
-
-    companion object{
-        var logUser : Users? = null
-
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,107 +41,40 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
+        providers = Arrays.asList<AuthUI.IdpConfig>(
+            AuthUI.IdpConfig.EmailBuilder().build(),
+            AuthUI.IdpConfig.GoogleBuilder().build()
+        )
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-
-        val user: Users? = intent.getSerializableExtra("usuario_conect") as? Users
-
-        if (user != null){
-            logUser = user
-        }
-
-        if (mAuth.currentUser == null){
-            Toast.makeText(this, "Se ha cerrado sesion de la ultima vez", Toast.LENGTH_SHORT).show()
-        }   else{
-            Toast.makeText(this, "Usuario ya loggeado, se cerrara sesion", Toast.LENGTH_SHORT).show()
-            mAuth.signOut()
-        }
-
-        btLogin.setOnClickListener(){
-            val email = etMail.text.toString()
-            val password = etPassword.text.toString()
-            if ( isValidMailAndPassword(email, password)){
-                logInByEmailAndPassword(email,password)
-            }
-        }
-
-        logInGoogle.setOnClickListener(){
-            view: View? -> signInGoogle()
-        }
+        showSignInOptions()
     }
 
-    private fun signInGoogle(){
-        val signInIntent: Intent = mGoogleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN)
-    }
+
+    private val MY_REQUEST_CODE: Int = 7117
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_GOOGLE_SIGN_IN) {
-            val task = getSignedInAccountFromIntent(data)
-            try {
-                // Google Sign In was successful, authenticate with Firebase
-                val account = task.getResult(ApiException::class.java)!!
-                Toast.makeText(this, "firebaseAuthWithGoogle:", Toast.LENGTH_SHORT).show()
-                if (account != null) {
-                    firebaseAuthWithGoogle(account.idToken!!)
-                    Toast.makeText(this, "Bienvenido " + account.displayName, Toast.LENGTH_SHORT).show()
-                }else{
-                    Toast.makeText(this, "cuenta vacia", Toast.LENGTH_SHORT).show()
-                }
-            } catch (e: ApiException) {
-                // Google Sign In failed, update UI appropriately
-                Toast.makeText(this, "Google sign in failed", Toast.LENGTH_SHORT).show()
-                // ...
-            }
-        }
-    }
-
-    private fun firebaseAuthWithGoogle(idToken: String) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        mAuth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Toast.makeText(this, "signInWithCredential:success", Toast.LENGTH_SHORT).show()
-                    var intent = Intent(this,WelcomeActivity::class.java)
-                    intent.putExtra("logUser",logUser)
-                    startActivity(intent)
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Toast.makeText(this, "Authentication Failed", Toast.LENGTH_SHORT).show()
-                    // ...
-                }
-
-                // ...
-            }
-    }
-
-
-    private fun logInByEmailAndPassword(email: String, password: String){
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this){task ->
-            if (task.isSuccessful){
-                Toast.makeText(this, "LogIn successful", Toast.LENGTH_SHORT).show()
+        if (requestCode == MY_REQUEST_CODE){
+            val response = IdpResponse.fromResultIntent(data)
+            if (resultCode == Activity.RESULT_OK){
+                val user = FirebaseAuth.getInstance().currentUser
+                Toast.makeText(this,"Bienvenido "+user!!.displayName,Toast.LENGTH_SHORT).show()
                 var intent = Intent(this,WelcomeActivity::class.java)
-                intent.putExtra("logUser",logUser)
                 startActivity(intent)
-            }else   {
-                Toast.makeText(this, "Unexpected error happen, try again", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(this,""+response!!.error!!.message,Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun isValidMailAndPassword(email: String, password: String) : Boolean{
-        return !email.isNullOrEmpty() && !password.isNullOrEmpty()
+
+    private fun showSignInOptions(){
+        startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
+            .setAvailableProviders(providers)
+            .setLogo(R.drawable.to_do_logo)
+            .setTheme(R.style.LoginTheme)
+            .build(), MY_REQUEST_CODE)
     }
-
-
 
 
 }

@@ -21,6 +21,7 @@ import com.example.proyecto_todolist_grupo10.networking.ApiApi
 import com.example.proyecto_todolist_grupo10.networking.ApiService
 import com.example.proyecto_todolist_grupo10.networking.HerokuApi
 import com.example.proyecto_todolist_grupo10.networking.HerokuApiService
+import com.firebase.ui.auth.AuthUI
 import kotlinx.android.synthetic.main.activity_welcome.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -170,6 +171,16 @@ class WelcomeActivity : AppCompatActivity() {
 
         loginuser!!.UsersLists = newList
 
+        btLogout.setOnClickListener{
+            //firebase logout
+            AuthUI.getInstance().signOut(this@WelcomeActivity)
+                .addOnCompleteListener{
+                    btLogout.isEnabled = false
+                    var intent = Intent(this,MainActivity::class.java)
+                    startActivity(intent)
+                }
+        }
+
     }
 
     fun onProfile(view: View){
@@ -210,11 +221,6 @@ class WelcomeActivity : AppCompatActivity() {
         os.writeObject(loginuser)
         os.close()
         fos.close()
-    }
-
-    fun onLogout(view: View){
-        var intent = Intent(this,MainActivity::class.java)
-        startActivity(intent)
     }
 
 }
