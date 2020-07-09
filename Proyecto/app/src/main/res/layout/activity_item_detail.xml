@@ -23,7 +23,7 @@
             android:id="@+id/btLogout1"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_margin="24dp"
+            android:layout_margin="5dp"
             android:background="@drawable/ic_baseline_keyboard_arrow_left_white_24"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
         <LinearLayout
@@ -33,6 +33,7 @@
             android:orientation="horizontal">
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/twNameItem"
+                android:textColor="@color/design_default_color_background"
                 android:layout_width="250dp"
                 android:gravity="center"
                 android:layout_height="wrap_content"
