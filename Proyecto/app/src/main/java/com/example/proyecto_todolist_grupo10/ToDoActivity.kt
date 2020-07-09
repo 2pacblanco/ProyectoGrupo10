@@ -97,16 +97,18 @@ class ToDoActivity : AppCompatActivity() {
                         val items = response.body()!!
                         items.forEach {
                             println("$it  --> Agregada al usuario")
-                            println(it.due_date.subSequence(0,10).toString() +"contra"+ LocalDate.now().toString())
-                            if (!it.done && LocalDate.parse(it.due_date.subSequence(0,10).toString()) > LocalDate.now()){
-                                items_usuario.add(it)
-                                invokeLocationAction(it)
+                            if (it.due_date != null){
+                                if (!it.done && LocalDate.parse(it.due_date.subSequence(0,10).toString()) > LocalDate.now()){
+                                    items_usuario.add(it)
+                                    invokeLocationAction(it)
+                                }
+                                if (it.done || LocalDate.parse(it.due_date.subSequence(0,10).toString()) < LocalDate.now()){
+                                    complete_items.add(it)
+                                }
+                                recycler_view.adapter?.notifyDataSetChanged()
+                                recycler_view2.adapter?.notifyDataSetChanged()
                             }
-                            if (it.done || LocalDate.parse(it.due_date.subSequence(0,10).toString()) < LocalDate.now()){
-                                complete_items.add(it)
-                            }
-                            recycler_view.adapter?.notifyDataSetChanged()
-                            recycler_view2.adapter?.notifyDataSetChanged()
+
                         }
                     }
                 }
