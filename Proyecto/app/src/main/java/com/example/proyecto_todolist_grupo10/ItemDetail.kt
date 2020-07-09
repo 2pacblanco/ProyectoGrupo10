@@ -27,6 +27,7 @@ import androidx.lifecycle.Observer
 import com.example.proyecto_todolist_grupo10.model.aux_item2
 import com.example.proyecto_todolist_grupo10.networking.HerokuApi
 import com.example.proyecto_todolist_grupo10.networking.HerokuApiService
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -53,15 +54,10 @@ class ItemDetail : AppCompatActivity() {
         var tempList1: Lists? = null
         var cal: Calendar = Calendar.getInstance()
         var cal2: Calendar = Calendar.getInstance()
-
-
         lateinit var list : Lists
-
         lateinit var mMap: GoogleMap
         lateinit var locationData: LocationUtil
         var LOCATION_PERMISSION = 100
-
-
 
     }
 
@@ -72,6 +68,7 @@ class ItemDetail : AppCompatActivity() {
         supportActionBar?.hide()
 
         imageViewPrioridadItem.visibility = View.GONE
+        locationData = LocationUtil(this)
 
 
         ItemRecive = intent.getSerializableExtra("Item") as Item
@@ -304,9 +301,6 @@ class ItemDetail : AppCompatActivity() {
                 isPermissionsGranted() -> locationData.observe(this, Observer {
                     println("${item.lat} , ${item.long}")
 
-                    MainActivity.fusedLocationClient1 = LocationServices.getFusedLocationProviderClient(this)
-
-
                     val polylineOptions = PolylineOptions().clickable(false).color(R.color.colorAccent).geodesic(true)
                         .width(10f)
 
@@ -314,9 +308,7 @@ class ItemDetail : AppCompatActivity() {
                     polylineOptions.add(LatLng(item.lat,item.long))
                     mMap.addPolyline(polylineOptions)
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(item.lat,item.long), 12.0f))
-
                 })
-
 
                 shouldShowRequestPermissionRationale() -> println("Ask Permission")
 

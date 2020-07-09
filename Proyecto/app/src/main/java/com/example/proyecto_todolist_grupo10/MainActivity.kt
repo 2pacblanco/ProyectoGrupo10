@@ -34,7 +34,6 @@ class MainActivity : AppCompatActivity() {
 
     companion object{
         var logUser : Users? = null
-        lateinit var fusedLocationClient1: FusedLocationProviderClient
 
     }
 
@@ -43,8 +42,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
 
-        fusedLocationClient1 = LocationServices.getFusedLocationProviderClient(this)
-        ItemDetail.locationData = LocationUtil(this)
+
 
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -66,31 +64,6 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Usuario ya loggeado, se cerrara sesion", Toast.LENGTH_SHORT).show()
             mAuth.signOut()
         }
-
-        //actualizado a la api de entrega 3
-        val request = HerokuApiService.buildService(HerokuApi::class.java)
-
-        val call = request.getUser(api_key)
-        call.enqueue(object : Callback<Users> {
-            override fun onResponse(call: Call<Users>, response: Response<Users>) {
-                if (response.isSuccessful) {
-                    if (response.body() != null) {
-                        val users =  response.body()!!
-                        WelcomeActivity.loginuser.email = users.email
-                        WelcomeActivity.loginuser.name = users.name
-                        WelcomeActivity.loginuser.phone = users.phone
-                        WelcomeActivity.loginuser.last_name = users.last_name
-                        WelcomeActivity.loginuser.profile_photo = users.profile_photo
-                    }
-                }
-            }
-            override fun onFailure(call: Call<Users>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
-        //println(WelcomeActivity.loginuser.toString())
-
-
 
         btLogin.setOnClickListener(){
             val email = etMail.text.toString()
@@ -140,7 +113,7 @@ class MainActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    //Toast.makeText(this, "signInWithCredential:success", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "signInWithCredential:success", Toast.LENGTH_SHORT).show()
                     var intent = Intent(this,WelcomeActivity::class.java)
                     intent.putExtra("logUser",logUser)
                     startActivity(intent)

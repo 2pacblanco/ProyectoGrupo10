@@ -39,51 +39,56 @@
             android:layout_marginTop="100dp">
         </ImageView>
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_margin="10dp">
-
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="100dp"
-                android:layout_height="24dp"
-                android:textColor="@android:color/black"
-                android:text="Correo : "
-                android:gravity="center"/>
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/twemailuser"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                android:gravity="center"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="10dp">
-
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="100dp"
                 android:layout_height="24dp"
                 android:textColor="@android:color/black"
                 android:gravity="center"
-                android:text="Nombre : "/>
-
+                android:text="Correo: "/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
                 android:orientation="horizontal">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/twemailuser"
+                    android:layout_width="253dp"
+                    android:layout_height="24dp" />
+                <Button
+                    android:id="@+id/btnChangeEmail"
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:background="@drawable/ic_mode_edit_black_24dp"
+                    />
+            </LinearLayout>
+        </LinearLayout>
 
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="10dp">
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="100dp"
+                android:layout_height="24dp"
+                android:textColor="@android:color/black"
+                android:gravity="center"
+                android:text="Nombre: "/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:orientation="horizontal">
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/twnameuser"
                     android:layout_width="253dp"
                     android:layout_height="24dp" />
-
                 <Button
                     android:id="@+id/btnChangeName"
                     android:layout_width="24dp"
@@ -91,35 +96,61 @@
                     style="?attr/materialButtonOutlinedStyle"
                     android:background="@drawable/ic_mode_edit_black_24dp"
                     />
-
-
             </LinearLayout>
-
         </LinearLayout>
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_margin="10dp">
-
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="100dp"
                 android:layout_height="24dp"
                 android:textColor="@android:color/black"
                 android:gravity="center"
-                android:text="Telefono : "/>
-
+                android:text="Apellido: "/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
                 android:orientation="horizontal">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/twapellidoeuser"
+                    android:layout_width="253dp"
+                    android:layout_height="24dp" />
 
+                <Button
+                    android:id="@+id/btnChangeApellido"
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:background="@drawable/ic_mode_edit_black_24dp"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="10dp">
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="100dp"
+                android:layout_height="24dp"
+                android:textColor="@android:color/black"
+                android:gravity="center"
+                android:text="Telefono: "/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:orientation="horizontal">
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/twphoneuser"
                     android:layout_width="253dp"
                     android:layout_height="24dp" />
-
                 <Button
                     android:id="@+id/btnChangePhone"
                     android:layout_width="24dp"
@@ -127,12 +158,13 @@
                     style="?attr/materialButtonOutlinedStyle"
                     android:background="@drawable/ic_mode_edit_black_24dp"
                     />
-
-
             </LinearLayout>
-
         </LinearLayout>
 
-
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_marginTop="40dp"
+            android:text="Apretar Salir para guardar los cambios correctamente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </LinearLayout>

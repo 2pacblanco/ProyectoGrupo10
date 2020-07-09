@@ -12,7 +12,6 @@ import android.os.Parcelable
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import com.example.proyecto_todolist_grupo10.MainActivity.Companion.fusedLocationClient1
 import com.example.proyecto_todolist_grupo10.model.Item
 import com.example.proyecto_todolist_grupo10.model.Lists
 import kotlinx.android.synthetic.main.activity_create_list.*
@@ -43,22 +42,6 @@ class CreateList : AppCompatActivity() {
 
 
         var items = ArrayList<Item>()
-        /*
-
-        fusedLocationClient1.lastLocation
-            .addOnSuccessListener { location : Location? ->
-                latitude1 = location!!.latitude
-                longitude1 = location!!.longitude
-                println(latitude1.toString() + longitude1.toString())
-                val item1 = Item("item creado automáticamente 1", 0, 0, "Bueno, esta es la nota generada automaticamente al crear la lista",LocalDate.now().plusDays(30), LocalDate.now(),0,latitude1,longitude1)
-                val item2 = Item("item creado automáticamente 2", 0, 0, "Bueno, esta es la nota generada automaticamente al crear la lista",LocalDate.now().plusDays(30), LocalDate.now(),0,latitude1,longitude1)
-                val item3 = Item("item creado automáticamente 3", 0, 0, "Bueno, esta es la nota generada automaticamente al crear la lista",LocalDate.now().plusDays(30), LocalDate.now(),0,latitude1,longitude1)
-                val item4 = Item("item creado automáticamente 4", 0, 0, "Bueno, esta es la nota generada automaticamente al crear la lista",LocalDate.now().plusDays(30), LocalDate.now(),0,latitude1,longitude1)
-                items.add(item1)
-                items.add(item2)
-                items.add(item3)
-                items.add(item4)*/
-
                 if (inputname == ""){
                     Toast.makeText(this.applicationContext, "Ingrese nombre, es obligatorio para crear una lista", Toast.LENGTH_SHORT).show()
                 }

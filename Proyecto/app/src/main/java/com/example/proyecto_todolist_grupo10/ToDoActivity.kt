@@ -1,8 +1,13 @@
 package com.example.proyecto_todolist_grupo10
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
@@ -10,18 +15,28 @@ import android.view.Window
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.proyecto_todolist_grupo10.configuration.RestApiService
 import com.example.proyecto_todolist_grupo10.model.*
 import com.example.proyecto_todolist_grupo10.networking.HerokuApi
 import com.example.proyecto_todolist_grupo10.networking.HerokuApiService
+import com.example.proyecto_todolist_grupo10.util.LocationUtil
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
 import kotlinx.android.synthetic.main.activity_to_do.*
 import kotlinx.android.synthetic.main.custom_dialog_name.*
 import kotlinx.android.synthetic.main.custom_dialog_share.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.LocalDate
 import java.util.regex.Pattern
 
 
@@ -35,12 +50,16 @@ class ToDoActivity : AppCompatActivity() {
         lateinit var items_usuario : ArrayList<Item>
         lateinit var complete_items : ArrayList<Item>
         lateinit var item_id_aux : String
+        lateinit var locationData2 : LocationUtil
         var state = 0
 
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do)
+
+        locationData2 = LocationUtil(this)
+
         supportActionBar?.hide()
 
         items_usuario = ArrayList<Item>()
@@ -68,6 +87,7 @@ class ToDoActivity : AppCompatActivity() {
 
         val call = request.getItemsbyList(list!!.id)
         call.enqueue(object : Callback<ArrayList<Item>> {
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onResponse(
                 call: Call<ArrayList<Item>>,
                 response: Response<ArrayList<Item>>
@@ -77,10 +97,12 @@ class ToDoActivity : AppCompatActivity() {
                         val items = response.body()!!
                         items.forEach {
                             println("$it  --> Agregada al usuario")
-                            if (!it.done) {
+                            println(it.due_date.subSequence(0,10).toString() +"contra"+ LocalDate.now().toString())
+                            if (!it.done && LocalDate.parse(it.due_date.subSequence(0,10).toString()) > LocalDate.now()){
                                 items_usuario.add(it)
+                                invokeLocationAction(it)
                             }
-                            if (it.done){
+                            if (it.done || LocalDate.parse(it.due_date.subSequence(0,10).toString()) < LocalDate.now()){
                                 complete_items.add(it)
                             }
                             recycler_view.adapter?.notifyDataSetChanged()
@@ -227,9 +249,59 @@ class ToDoActivity : AppCompatActivity() {
         recycler_view2.visibility = View.GONE
 
 
-
-
     }
+
+    private fun invokeLocationAction(item: Item) {
+        when {
+            isPermissionsGranted() -> locationData2.observe(this, Observer {
+                println("${item.lat} , ${item.long}")
+            })
+
+            shouldShowRequestPermissionRationale() -> println("Ask Permission")
+
+            else -> ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                ItemDetail.LOCATION_PERMISSION
+            )
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            ItemDetail.LOCATION_PERMISSION -> {
+                invokeLocationAction(ItemDetail.ItemRecive)
+            }
+        }
+    }
+
+    private fun isPermissionsGranted() =
+        ActivityCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+
+    private fun shouldShowRequestPermissionRationale() =
+        ActivityCompat.shouldShowRequestPermissionRationale(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) && ActivityCompat.shouldShowRequestPermissionRationale(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
     fun onBack(view: View){
         var intent = Intent(this,WelcomeActivity::class.java)
         intent.putExtra("logUser", loguser)

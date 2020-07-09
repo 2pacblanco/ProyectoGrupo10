@@ -17,9 +17,7 @@ import com.example.proyecto_todolist_grupo10.model.Users
 class UserInfoActivity : AppCompatActivity(){
 
     companion object{
-
         var loginuser: Users? = null
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
