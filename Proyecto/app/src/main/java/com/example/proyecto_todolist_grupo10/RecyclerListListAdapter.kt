@@ -171,10 +171,7 @@ class HistoricAdapter2 (private val toDoList: ArrayList<Item>):
             this.item = item
             view.imageViewPrioridad.visibility = View.GONE
             view.twNameToDoActivity.text = item.name
-
             item.check = 0
-
-
 
             if(item.done){
                 view.checkBoxItem.isChecked = true

@@ -105,9 +105,9 @@ class ToDoActivity : AppCompatActivity() {
                                 if (it.done || LocalDate.parse(it.due_date.subSequence(0,10).toString()) < LocalDate.now()){
                                     complete_items.add(it)
                                 }
-                                recycler_view.adapter?.notifyDataSetChanged()
-                                recycler_view2.adapter?.notifyDataSetChanged()
                             }
+                            recycler_view.adapter?.notifyDataSetChanged()
+                            recycler_view2.adapter?.notifyDataSetChanged()
                         }
                     }
                 }
@@ -117,6 +117,7 @@ class ToDoActivity : AppCompatActivity() {
                 Toast.makeText(this@ToDoActivity, "${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
+
 
 
 
