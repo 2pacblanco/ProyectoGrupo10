@@ -9,7 +9,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:minHeight="?attr/actionBarSize"
-        android:background="@color/grey"
+        android:background="@color/colorPrimaryDark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:text="Log Out"
             android:textSize="20sp"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/design_default_color_background"
             android:drawableLeft="@drawable/ic_baseline_exit_to_app_white_24"
 
             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
@@ -30,24 +30,24 @@
             android:orientation="horizontal"
             android:gravity="right">
 
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/twnameuser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/design_default_color_background"
+                android:layout_marginRight="10dp"
+                android:text="Nombre de usuario" />
 
             <ImageView
+                android:id="@+id/imageviewUser1"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="right"
-                android:onClick="onProfile"
-                android:id="@+id/imageviewUser1"/>
-
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_gravity="center_vertical"
-                android:text="Nombre de usuario"
-                android:id="@+id/twnameuser"/>
+                android:onClick="onProfile" />
 
 
-            </LinearLayout>
+        </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 
 
